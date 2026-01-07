@@ -1,3 +1,8 @@
+## UAS PEMOGRAMAN MOBILE 2
+- Nama : Ginda Azahra
+- Kelas : TIF RP 23 CNS B
+- NIM : 23552011281
+
 ## 📱 Sistem Presensi Karyawan Berbasis Mobile
 
 Aplikasi ini merupakan sistem presensi karyawan berbasis mobile yang dikembangkan untuk membantu proses pencatatan kehadiran karyawan secara digital, terstruktur, dan real-time.
