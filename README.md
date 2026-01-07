@@ -12,25 +12,23 @@ Sistem ini dirancang untuk meningkatkan efisiensi, akurasi, dan transparansi dal
 
 ## ✨ Fitur Utama
 
-Presensi masuk dan pulang karyawan
+- Presensi masuk dan pulang karyawan
 
-Riwayat presensi harian
+- Riwayat presensi harian
 
-Pengajuan izin dan sakit
+- Pengajuan izin dan sakit
 
-Persetujuan izin oleh staf
+- Persetujuan izin oleh staf
 
-Dashboard monitoring kehadiran
+- Dashboard monitoring kehadiran
 
 ## 🛠️ Teknologi yang Digunakan
 
-Flutter (Mobile Application)
+- Flutter (Mobile Application)
 
-Firebase Authentication (Autentikasi pengguna)
+- Firebase Authentication (Autentikasi pengguna)
 
-REST API / Mock API (Simulasi backend)
-
-Provider (State Management)
+- REST API / Mock API (Simulasi backend)
 
 ## 📌 Catatan
 
