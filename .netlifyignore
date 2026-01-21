@@ -1,0 +1,11 @@
+ios/
+android/
+linux/
+macos/
+windows/
+.git/
+.gitignore
+.env
+.flutter-plugins-dependencies
+.packages
+pubspec.lock
