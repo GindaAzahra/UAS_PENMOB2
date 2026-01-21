@@ -403,6 +403,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> with TickerProviderStat
                           onPressed: () {
                             Navigator.pop(context);
                             Navigator.pop(context);
+                            Navigator.pushNamed(context, '/order_tracking');
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: primaryColor,

@@ -78,6 +78,15 @@ class _HomeScreenState extends State<HomeScreen> {
     return filtered;
   }
 
+  List<Map<String, dynamic>> get topRatedFoods {
+    return dummyFoods.take(5).map((food) {
+      return {
+        ...food,
+        'badge': '⭐ Top Rated',
+      };
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
