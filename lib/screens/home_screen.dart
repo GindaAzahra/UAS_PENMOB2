@@ -198,10 +198,7 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: const EdgeInsets.only(right: 16),
               child: GestureDetector(
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const EnhancedCartScreen()),
-                  );
+                  Navigator.pushNamed(context, '/cart');
                 },
                 child: Stack(
                   children: [
@@ -436,11 +433,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   reviews: food['reviews'],
                   imageUrl: food['image'],
                   onTap: () {
-                    Navigator.push(
+                    Navigator.pushNamed(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) => FoodDetailScreen(food: food),
-                      ),
+                      '/food_detail',
+                      arguments: food,
                     );
                   },
                 );

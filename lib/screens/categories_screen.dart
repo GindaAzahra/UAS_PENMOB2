@@ -54,12 +54,10 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                     reviews: food['reviews'],
                     imageUrl: food['image'],
                     onTap: () {
-                      Navigator.push(
+                      Navigator.pushNamed(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              FoodDetailScreen(food: food),
-                        ),
+                        '/food_detail',
+                        arguments: food,
                       );
                     },
                   );

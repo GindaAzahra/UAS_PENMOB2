@@ -316,12 +316,10 @@ class _SearchScreenState extends State<SearchScreen> {
                         reviews: food['reviews'],
                         imageUrl: food['image'],
                         onTap: () {
-                          Navigator.push(
+                          Navigator.pushNamed(
                             context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  FoodDetailScreen(food: food),
-                            ),
+                            '/food_detail',
+                            arguments: food,
                           );
                         },
                       );

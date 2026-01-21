@@ -214,7 +214,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                                   ),
                                 ),
                                 ElevatedButton.icon(
-                                  onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LoyaltyProgramScreen())),
+                                  onPressed: () => Navigator.pushNamed(context, '/loyalty'),
                                   icon: const Icon(Icons.loyalty, size: 14),
                                   label: const Text('Lihat Program'),
                                   style: ElevatedButton.styleFrom(
