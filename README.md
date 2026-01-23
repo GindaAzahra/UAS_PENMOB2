@@ -12,7 +12,7 @@ Aplikasi ini dibangun menggunakan Flutter dan menerapkan konsep Hybrid Server, R
 
 * Menggunakan Supabase sebagai:
 
-  * Authentication (pada tahap awal pengembangan),
+  * Authentication
 
   * Database,
 
@@ -20,9 +20,9 @@ Aplikasi ini dibangun menggunakan Flutter dan menerapkan konsep Hybrid Server, R
 
 * Mengimplementasikan animasi dan transisi, seperti:
 
-* Animasi pada Splash Screen saat aplikasi pertama kali dibuka,
+   * Animasi pada Splash Screen saat aplikasi pertama kali dibuka,
 
-* Animasi transisi halaman, termasuk efek slide pada halaman login,
+   * Animasi transisi halaman, termasuk efek slide pada halaman login,
 
 * Melakukan deployment aplikasi ke Web dalam bentuk Progressive Web App (PWA) menggunakan layanan hosting Netlify, sehingga aplikasi dapat diakses melalui browser.
 
@@ -101,12 +101,17 @@ Aplikasi ini dibangun menggunakan Flutter dan menerapkan konsep Hybrid Server, R
 ```bash
 flutter pub get
 flutter run
+```
 
+```bash
 Untuk web:
 flutter build web
+```
 
+```bash
 Untuk APK:
 flutter build apk
+```
 
 ## 🌐 Demo Project
 ### 🔗 Demo Web :
