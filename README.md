@@ -42,7 +42,7 @@ Aplikasi ini dibangun menggunakan Flutter dan menerapkan konsep Hybrid Server, R
   * Password
   * Setelah registrasi berhasil, pengguna bisa langsung login
 
-4. Main Navigation (Bottom Navigation Bar)
+4. Main Navigation
   * Home
   * Keranjang
   * Pesanan
@@ -51,11 +51,13 @@ Aplikasi ini dibangun menggunakan Flutter dan menerapkan konsep Hybrid Server, R
 5. Home Page
   * Menampilkan daftar makanan
   * Menu rekomendasi / pilihan
-  * Fitur like makanan
-  * Review / komentar pelanggan
+  * Fitur like review / komentar orang lain
+  * Review / komentar
 
 6. Detail Makanan & Pembelian
   * Klik makanan untuk melihat detail
+  * Bisa menambahkan seperti catatan terhadap makanan yang di pesan
+  * Bisa menambahkan komentar / review terhadap makanan yang sudah di order
   * Proses tambah ke keranjang & checkout
   
 7. Pesanan Page
