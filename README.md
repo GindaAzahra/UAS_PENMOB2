@@ -114,7 +114,7 @@ flutter build apk
 ```
 
 ## 🌐 Demo Project
-### 🔗 Demo Web :
+### 🔗 Video Demo :
 https://drive.google.com/drive/folders/1Nnk2rrT1y_XK-FzxrcYBnN8UGFDy6Mg-
 
 ### 📸 Screenshot Aplikasi
