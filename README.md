@@ -118,14 +118,14 @@ flutter build apk
 https://drive.google.com/drive/folders/1Nnk2rrT1y_XK-FzxrcYBnN8UGFDy6Mg-
 
 ### 📸 Screenshot Aplikasi
-* Splash Screen 
+####  SPLASH SCREEN
 ![UAS Mobile 2](image/S1.png)
 
-* Login & Register
+#### LOGIN & REGISTER
 ![UAS Mobile 2](image/S2.png)
 ![UAS Mobile 2](image/S3.png)
 
-* Home
+#### HOME
 ![UAS Mobile 2](image/S4.png)
 ![UAS Mobile 2](image/S5.png)
 ![UAS Mobile 2](image/S6.png)
@@ -133,7 +133,7 @@ https://drive.google.com/drive/folders/1Nnk2rrT1y_XK-FzxrcYBnN8UGFDy6Mg-
 ![UAS Mobile 2](image/S8.png)
 ![UAS Mobile 2](image/S9.png)
 
-* Keranjang 
+#### KERANJANG 
 ![UAS Mobile 2](image/S10.png)
 ![UAS Mobile 2](image/S11.png)
 ![UAS Mobile 2](image/S12.png)
@@ -143,18 +143,19 @@ https://drive.google.com/drive/folders/1Nnk2rrT1y_XK-FzxrcYBnN8UGFDy6Mg-
 ![UAS Mobile 2](image/S16.png)
 ![UAS Mobile 2](image/S17.png)
 
-
-* Pesanan 
+#### PESANAN 
 ![UAS Mobile 2](image/S18.png)
 ![UAS Mobile 2](image/S19.png)
 ![UAS Mobile 2](image/S20.png)
 
-* Profile
+#### PROFILE
 ![UAS Mobile 2](image/S21.png)
 ![UAS Mobile 2](image/S22.png)
 
 ## 👩‍💻 Author
-Nama: Ginda Azahra
-Project: UAS PEMOB 2
-Universitas Teknologi Bandung
-Jurusan: Informatika
+* Nama: Ginda Azahra
+* Mata Kuliah : Pemograman Mobile 2
+* NIM : 23552011281
+* Kelas : TIF RP 23 CNS B
+* Universitas Teknologi Bandung
+
