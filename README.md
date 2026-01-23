@@ -85,7 +85,7 @@ Aplikasi ini dibangun menggunakan Flutter dan menerapkan konsep Hybrid Server, R
 * Register
 * Home
 * Detail Makanan
-* KeranjanG
+* Keranjang
 * Pesanan
 * Profile
   
