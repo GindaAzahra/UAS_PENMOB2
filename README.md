@@ -1,4 +1,4 @@
-# 🍔 Aliya Divani — Food Ordering
+# 🛵🍱 Aliya Divani — Food Ordering
 ## 🏷️ Aliya Divani singakatan
 Aplikasi Layanan yang dinamis & variatif untuk nikmati makanan.
 
@@ -28,54 +28,54 @@ Aplikasi ini dibangun menggunakan Flutter dan menerapkan konsep Hybrid Server, R
 
 ## 🧭 Alur Aplikasi
 1. Splash Screen
-* Menampilkan logo
+  * Menampilkan logo
 
 2. Login Page
-* Login menggunakan email & password
+  * Login menggunakan email & password
 
 3. Register Page
-* Form registrasi:
-* Nama lengkap
-* Email
-* Nomor telepon
-* Alamat
-* Password
-* Setelah registrasi berhasil, pengguna bisa langsung login
+  * Form registrasi:
+  * Nama lengkap
+  * Email
+  * Nomor telepon
+  * Alamat
+  * Password
+  * Setelah registrasi berhasil, pengguna bisa langsung login
 
 4. Main Navigation (Bottom Navigation Bar)
-* Home
-* Keranjang
-* Pesanan
-* Profile
+  * Home
+  * Keranjang
+  * Pesanan
+  * Profile
   
 5. Home Page
-* Menampilkan daftar makanan
-* Menu rekomendasi / pilihan
-* Fitur like makanan
-* Review / komentar pelanggan
+  * Menampilkan daftar makanan
+  * Menu rekomendasi / pilihan
+  * Fitur like makanan
+  * Review / komentar pelanggan
 
 6. Detail Makanan & Pembelian
-* Klik makanan untuk melihat detail
-* Proses tambah ke keranjang & checkout
+  * Klik makanan untuk melihat detail
+  * Proses tambah ke keranjang & checkout
   
 7. Pesanan Page
-* Menampilkan daftar pesanan
-* Status pesanan
-* Tracking pesanan terintegrasi ke maps
+  * Menampilkan daftar pesanan
+  * Status pesanan
+  * Tracking pesanan terintegrasi ke maps
   
 8. Profile Page
-* Edit profil
-* Edit alamat
-* Metode Pembayaran
-* Favorit saya
-* Notifikasi
-* Pengaturan
-* Program loyalitas
-* Penawaran spesial
-* Program referal
-* Dompet digital
-* Hubungi kami
-* Pusat bantuan
+  * Edit profil
+  * Edit alamat
+  * Metode Pembayaran
+  * Favorit saya
+  * Notifikasi
+  * Pengaturan
+  * Program loyalitas
+  * Penawaran spesial
+  * Program referal
+  * Dompet digital
+  * Hubungi kami
+  * Pusat bantuan
   
 ## 📱 Halaman Dinamis 
 * Splash Screen
