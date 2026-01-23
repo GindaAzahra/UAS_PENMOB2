@@ -1,18 +1,90 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../utils/constants.dart';
 import '../widgets/utility_widgets.dart';
+import '../services/order_service.dart';
 
 class OrderTrackingScreen extends StatefulWidget {
   final String orderId;
+  final OrderModel? orderData;
   
-  const OrderTrackingScreen({super.key, this.orderId = 'ORD002'});
+  const OrderTrackingScreen({super.key, this.orderId = 'ORD002', this.orderData});
 
   @override
   State<OrderTrackingScreen> createState() => _OrderTrackingScreenState();
 }
 
 class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
-  int currentStep = 2; // 0: Confirmed, 1: Preparing, 2: On the way, 3: Delivered
+  int currentStep = 1; // 0: Confirmed, 1: Preparing, 2: On the way, 3: Delivered
+  late OrderModel _order;
+
+  @override
+  void initState() {
+    super.initState();
+    // Use provided orderData or find from dummyOrders
+    if (widget.orderData != null) {
+      _order = widget.orderData!;
+      // Set current step based on status
+      _setCurrentStepFromStatus(_order.status);
+    } else {
+      // Create a dummy order for testing
+      _order = OrderModel(
+        id: widget.orderId,
+        userId: 'unknown',
+        items: [],
+        subtotal: 0,
+        tax: 0,
+        shippingCost: 0,
+        discountAmount: 0,
+        total: 0,
+        status: 'pending',
+        deliveryAddress: '',
+        orderedAt: DateTime.now(),
+      );
+      _setCurrentStepFromStatus(_order.status);
+    }
+  }
+
+  void _setCurrentStepFromStatus(String status) {
+    switch (status.toLowerCase()) {
+      case 'confirmed':
+        currentStep = 0;
+        break;
+      case 'in progress':
+      case 'preparing':
+        currentStep = 1;
+        break;
+      case 'on the way':
+      case 'delivering':
+        currentStep = 2;
+        break;
+      case 'delivered':
+      case 'completed':
+        currentStep = 3;
+        break;
+      default:
+        currentStep = 1;
+    }
+  }
+
+  StatusType _getStatusType(String status) {
+    switch (status.toLowerCase()) {
+      case 'delivered':
+      case 'completed':
+        return StatusType.success;
+      case 'in progress':
+      case 'preparing':
+        return StatusType.warning;
+      case 'on the way':
+      case 'delivering':
+        return StatusType.info;
+      case 'cancelled':
+        return StatusType.error;
+      default:
+        return StatusType.warning;
+    }
+  }
 
   final List<Map<String, dynamic>> steps = [
     {
@@ -75,14 +147,20 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
               ),
               child: Stack(
                 children: [
-                  Image.network(
-                    dummyOrders[1]['image'],
-                    width: double.infinity,
-                    height: double.infinity,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return const Icon(Icons.image_not_supported, size: 60);
-                    },
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(16),
+                    child: Image.network(
+                      'https://images.pexels.com/photos/1126359/pexels-photo-1126359.jpeg?auto=compress&cs=tinysrgb&w=500&h=500&fit=crop',
+                      width: double.infinity,
+                      height: double.infinity,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container(
+                          color: lightGrayColor,
+                          child: const Icon(Icons.image_not_supported, size: 60),
+                        );
+                      },
+                    ),
                   ),
                   Container(
                     decoration: BoxDecoration(
@@ -90,7 +168,7 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
                       gradient: LinearGradient(
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
-                        colors: [Colors.transparent, Colors.black.withOpacity(0.6)],
+                        colors: [Colors.transparent, Colors.black.withValues(alpha: 0.6)],
                       ),
                     ),
                   ),
@@ -102,7 +180,7 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          dummyOrders[1]['id'],
+                          _order.id,
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -113,16 +191,20 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              dummyOrders[1]['restaurant'],
-                              style: const TextStyle(
-                                fontSize: 12,
-                                color: Colors.white,
+                            Expanded(
+                              child: Text(
+                                'Food App Restaurant',
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.white,
+                                ),
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
+                            const SizedBox(width: 8),
                             StatusBadge(
-                              label: dummyOrders[1]['status'],
-                              type: StatusType.warning,
+                              label: _order.status,
+                              type: _getStatusType(_order.status),
                             ),
                           ],
                         ),
@@ -163,7 +245,7 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
                                     boxShadow: isCurrent
                                         ? [
                                             BoxShadow(
-                                              color: primaryColor.withOpacity(0.3),
+                                              color: primaryColor.withValues(alpha: 0.3),
                                               blurRadius: 12,
                                               offset: const Offset(0, 4),
                                             ),
@@ -216,7 +298,7 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
                                       step['time'],
                                       style: TextStyle(
                                         fontSize: 10,
-                                        color: primaryColor.withOpacity(0.7),
+                                        color: primaryColor.withValues(alpha: 0.7),
                                         fontWeight: FontWeight.w600,
                                       ),
                                     ),
@@ -327,10 +409,10 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
                                 width: 44,
                                 height: 44,
                                 decoration: BoxDecoration(
-                                  color: primaryColor.withOpacity(0.1),
+                                  color: primaryColor.withValues(alpha: 0.1),
                                   borderRadius: BorderRadius.circular(22),
                                   border: Border.all(
-                                    color: primaryColor.withOpacity(0.3),
+                                    color: primaryColor.withValues(alpha: 0.3),
                                   ),
                                 ),
                                 child: Icon(
@@ -425,13 +507,30 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      onPressed: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Membuka peta...'),
-                            backgroundColor: secondaryColor,
-                          ),
-                        );
+                      onPressed: () async {
+                        // Get delivery address from order data
+                        final address = _order.deliveryAddress;
+                        final encodedAddress = Uri.encodeComponent(address);
+                        final googleMapsUrl = 'https://www.google.com/maps/search/?api=1&query=$encodedAddress';
+                        
+                        try {
+                          final uri = Uri.parse(googleMapsUrl);
+                          if (await canLaunchUrl(uri)) {
+                            await launchUrl(uri, mode: LaunchMode.externalApplication);
+                          } else {
+                            // Fallback: open in browser
+                            await launchUrl(uri, mode: LaunchMode.platformDefault);
+                          }
+                        } catch (e) {
+                          if (mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Tidak dapat membuka peta: $e'),
+                                backgroundColor: errorColor,
+                              ),
+                            );
+                          }
+                        }
                       },
                       icon: const Icon(Icons.location_on, color: textColor, size: 18),
                       label: const Text(
@@ -454,13 +553,126 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      onPressed: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Berbagi pesanan...'),
-                            backgroundColor: primaryColor,
-                          ),
-                        );
+                      onPressed: () async {
+                        // Create share content
+                        final orderId = _order.id;
+                        final status = _order.status;
+                        final itemsText = _order.itemsDisplay;
+                        
+                        final shareText = '''🍔 Pesanan dari Food App!
+
+📋 Order ID: $orderId
+🏪 Restaurant: Food App Restaurant
+📦 Status: $status
+🍽️ Items: $itemsText
+
+Download Food App sekarang untuk pesan makanan favoritmu!''';
+                        
+                        // Copy to clipboard and show share dialog
+                        await Clipboard.setData(ClipboardData(text: shareText));
+                        
+                        if (mounted) {
+                          showModalBottomSheet(
+                            context: context,
+                            backgroundColor: Colors.transparent,
+                            isScrollControlled: true,
+                            builder: (context) => Container(
+                              constraints: BoxConstraints(
+                                maxHeight: MediaQuery.of(context).size.height * 0.7,
+                              ),
+                              padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(24),
+                                  topRight: Radius.circular(24),
+                                ),
+                              ),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Container(
+                                    width: 40,
+                                    height: 4,
+                                    decoration: BoxDecoration(
+                                      color: lightGrayColor,
+                                      borderRadius: BorderRadius.circular(2),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 16),
+                                  Container(
+                                    padding: const EdgeInsets.all(12),
+                                    decoration: BoxDecoration(
+                                      color: successColor.withValues(alpha: 0.1),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: const Icon(Icons.check_circle, color: successColor, size: 40),
+                                  ),
+                                  const SizedBox(height: 12),
+                                  const Text(
+                                    'Tersalin ke Clipboard!',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w700,
+                                      color: textColor,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 6),
+                                  Text(
+                                    'Info pesanan telah disalin',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      color: darkGrayColor,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 16),
+                                  Container(
+                                    padding: const EdgeInsets.all(12),
+                                    decoration: BoxDecoration(
+                                      color: backgroundColor,
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(color: lightGrayColor),
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          '🍔 Pesanan dari Food App!',
+                                          style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: textColor),
+                                        ),
+                                        const SizedBox(height: 8),
+                                        _ShareInfoRow(icon: '📋', label: 'Order ID', value: orderId),
+                                        _ShareInfoRow(icon: '🏪', label: 'Restaurant', value: 'Food App Restaurant'),
+                                        _ShareInfoRow(icon: '📦', label: 'Status', value: status),
+                                        _ShareInfoRow(icon: '🍽️', label: 'Items', value: itemsText),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(height: 16),
+                                  SizedBox(
+                                    width: double.infinity,
+                                    child: ElevatedButton(
+                                      onPressed: () => Navigator.pop(context),
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: primaryColor,
+                                        padding: const EdgeInsets.symmetric(vertical: 14),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(12),
+                                        ),
+                                        elevation: 0,
+                                      ),
+                                      child: const Text(
+                                        'Tutup',
+                                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 14),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        }
                       },
                       icon: const Icon(Icons.share, size: 18),
                       label: const Text(
@@ -535,3 +747,52 @@ class _OrderItem extends StatelessWidget {
     );
   }
 }
+
+class _ShareInfoRow extends StatelessWidget {
+  final String icon;
+  final String label;
+  final String value;
+
+  const _ShareInfoRow({
+    required this.icon,
+    required this.label,
+    required this.value,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 6),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(icon, style: const TextStyle(fontSize: 12)),
+          const SizedBox(width: 6),
+          SizedBox(
+            width: 70,
+            child: Text(
+              '$label:',
+              style: TextStyle(
+                fontSize: 12,
+                color: darkGrayColor,
+              ),
+            ),
+          ),
+          Expanded(
+            child: Text(
+              value,
+              style: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+                color: textColor,
+              ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+

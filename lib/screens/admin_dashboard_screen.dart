@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
 
 class AdminDashboardScreen extends StatefulWidget {
-  const AdminDashboardScreen({Key? key}) : super(key: key);
+  const AdminDashboardScreen({super.key});
 
   @override
   State<AdminDashboardScreen> createState() => _AdminDashboardScreenState();
@@ -70,7 +70,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                       width: 60,
                       height: 60,
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.2),
+                        color: Colors.white.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: const Icon(
@@ -93,7 +93,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                       'Panel Administrator',
                       style: TextStyle(
                         fontSize: 12,
-                        color: Colors.white.withOpacity(0.7),
+                        color: Colors.white.withValues(alpha: 0.7),
                       ),
                     ),
                   ],
@@ -149,14 +149,14 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.05),
+                  color: Colors.white.withValues(alpha: 0.05),
                 ),
                 child: Column(
                   children: [
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.1),
+                        color: Colors.white.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Row(
@@ -190,7 +190,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                   'Administrator',
                                   style: TextStyle(
                                     fontSize: 11,
-                                    color: Colors.white.withOpacity(0.6),
+                                    color: Colors.white.withValues(alpha: 0.6),
                                   ),
                                 ),
                               ],
@@ -205,7 +205,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                       child: ElevatedButton(
                         onPressed: _logout,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red.withOpacity(0.8),
+                          backgroundColor: Colors.red.withValues(alpha: 0.8),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
@@ -262,10 +262,10 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFFFB800).withOpacity(0.1),
+                        color: const Color(0xFFFFB800).withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(8),
                         border: Border.all(
-                          color: const Color(0xFFFFB800).withOpacity(0.3),
+                          color: const Color(0xFFFFB800).withValues(alpha: 0.3),
                         ),
                       ),
                       child: Row(
@@ -306,7 +306,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                       change: '+12%',
                       icon: Icons.shopping_cart,
                       color: const Color(0xFF00A86B),
-                      bgColor: const Color(0xFF00A86B).withOpacity(0.1),
+                      bgColor: const Color(0xFF00A86B).withValues(alpha: 0.1),
                     ),
                     _StatCard(
                       title: 'Total Revenue',
@@ -314,7 +314,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                       change: '+8%',
                       icon: Icons.attach_money,
                       color: const Color(0xFFFFB800),
-                      bgColor: const Color(0xFFFFB800).withOpacity(0.1),
+                      bgColor: const Color(0xFFFFB800).withValues(alpha: 0.1),
                     ),
                     _StatCard(
                       title: 'Active Users',
@@ -322,7 +322,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                       change: '+15%',
                       icon: Icons.people,
                       color: const Color(0xFF2E5090),
-                      bgColor: const Color(0xFF2E5090).withOpacity(0.1),
+                      bgColor: const Color(0xFF2E5090).withValues(alpha: 0.1),
                     ),
                     _StatCard(
                       title: 'Restaurants',
@@ -330,7 +330,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                       change: '+3',
                       icon: Icons.restaurant,
                       color: const Color(0xFFFF6B6B),
-                      bgColor: const Color(0xFFFF6B6B).withOpacity(0.1),
+                      bgColor: const Color(0xFFFF6B6B).withValues(alpha: 0.1),
                     ),
                   ],
                 ),
@@ -403,7 +403,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                       change: '+12%',
                       icon: Icons.shopping_cart,
                       color: const Color(0xFF00A86B),
-                      bgColor: const Color(0xFF00A86B).withOpacity(0.1),
+                      bgColor: const Color(0xFF00A86B).withValues(alpha: 0.1),
                     ),
                     _StatCard(
                       title: 'Total Revenue',
@@ -411,7 +411,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                       change: '+8%',
                       icon: Icons.attach_money,
                       color: const Color(0xFFFFB800),
-                      bgColor: const Color(0xFFFFB800).withOpacity(0.1),
+                      bgColor: const Color(0xFFFFB800).withValues(alpha: 0.1),
                     ),
                     _StatCard(
                       title: 'Active Users',
@@ -419,7 +419,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                       change: '+15%',
                       icon: Icons.people,
                       color: const Color(0xFF2E5090),
-                      bgColor: const Color(0xFF2E5090).withOpacity(0.1),
+                      bgColor: const Color(0xFF2E5090).withValues(alpha: 0.1),
                     ),
                     _StatCard(
                       title: 'Restaurants',
@@ -427,7 +427,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                       change: '+3',
                       icon: Icons.restaurant,
                       color: const Color(0xFFFF6B6B),
-                      bgColor: const Color(0xFFFF6B6B).withOpacity(0.1),
+                      bgColor: const Color(0xFFFF6B6B).withValues(alpha: 0.1),
                     ),
                   ],
                 ),
@@ -460,21 +460,21 @@ class _MenuItem extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
-          color: isActive ? Colors.white.withOpacity(0.2) : Colors.transparent,
+          color: isActive ? Colors.white.withValues(alpha: 0.2) : Colors.transparent,
           borderRadius: BorderRadius.circular(8),
         ),
         child: Row(
           children: [
             Icon(
               icon,
-              color: isActive ? Colors.white : Colors.white.withOpacity(0.6),
+              color: isActive ? Colors.white : Colors.white.withValues(alpha: 0.6),
               size: 20,
             ),
             const SizedBox(width: 12),
             Text(
               label,
               style: TextStyle(
-                color: isActive ? Colors.white : Colors.white.withOpacity(0.6),
+                color: isActive ? Colors.white : Colors.white.withValues(alpha: 0.6),
                 fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
                 fontSize: 14,
               ),
@@ -523,7 +523,7 @@ class _StatCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
           ),
         ],
@@ -550,7 +550,7 @@ class _StatCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.1),
+                  color: color.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(4),
                 ),
                 child: Text(
@@ -585,3 +585,4 @@ class _StatCard extends StatelessWidget {
     );
   }
 }
+

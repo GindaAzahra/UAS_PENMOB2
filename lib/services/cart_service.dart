@@ -43,24 +43,16 @@ class CartService extends ChangeNotifier {
     int quantity = 1,
     String notes = '',
   }) {
-    print('🛒 Adding item to cart:');
-    print('   Food ID: ${food['id']}');
-    print('   Food Name: ${food['name']}');
-    print('   Quantity: $quantity');
-    print('   Current cart size: ${_items.length}');
-    
     final existingItemIndex = _items.indexWhere(
       (item) => item.foodId == food['id'],
     );
 
     if (existingItemIndex >= 0) {
-      print('   ✅ Item already exists, updating quantity');
       _items[existingItemIndex].quantity += quantity;
       if (notes.isNotEmpty) {
         _items[existingItemIndex].notes = notes;
       }
     } else {
-      print('   ✅ Adding new item');
       _items.add(
         CartItemModel(
           foodId: food['id'],
@@ -72,8 +64,6 @@ class CartService extends ChangeNotifier {
         ),
       );
     }
-    print('   New cart size: ${_items.length}');
-    print('   Total items: $totalItems');
     _validatePromo();
     notifyListeners();
   }

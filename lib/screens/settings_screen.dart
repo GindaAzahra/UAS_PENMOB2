@@ -67,7 +67,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           notificationsEnabled = value;
                         });
                       },
-                      activeColor: primaryColor,
+                      activeThumbColor: primaryColor,
                     ),
                   ),
                 ],
@@ -104,7 +104,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           darkModeEnabled = value;
                         });
                       },
-                      activeColor: primaryColor,
+                      activeThumbColor: primaryColor,
                     ),
                   ),
                 ],

@@ -258,7 +258,7 @@ class _AnimatedRatingBarState extends State<AnimatedRatingBar>
                 TextSpan(
                   text: ' (${widget.reviews} ulasan)',
                   style: TextStyle(
-                    color: Colors.grey.withOpacity(0.6),
+                    color: Colors.grey.withValues(alpha: 0.6),
                     fontSize: 10,
                   ),
                 ),
@@ -338,7 +338,7 @@ class _ExpandableSectionState extends State<ExpandableSection>
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
             decoration: BoxDecoration(
-              color: primaryColor.withOpacity(0.05),
+              color: primaryColor.withValues(alpha: 0.05),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Row(
@@ -421,9 +421,9 @@ class _ShimmerLoadingState extends State<ShimmerLoading>
               begin: Alignment(-1 - _controller.value * 2, 0),
               end: Alignment(_controller.value * 2, 0),
               colors: [
-                Colors.white.withOpacity(0.1),
-                Colors.white.withOpacity(0.3),
-                Colors.white.withOpacity(0.1),
+                Colors.white.withValues(alpha: 0.1),
+                Colors.white.withValues(alpha: 0.3),
+                Colors.white.withValues(alpha: 0.1),
               ],
             ).createShader(bounds);
           },
@@ -469,3 +469,4 @@ class BadgeWidget extends StatelessWidget {
     );
   }
 }
+

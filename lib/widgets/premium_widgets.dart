@@ -26,24 +26,31 @@ class SpecialDealCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: const EdgeInsets.only(bottom: 12),
+        margin: const EdgeInsets.only(bottom: 14),
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [primaryColor.withOpacity(0.1), accentColor.withOpacity(0.1)],
+            colors: [primaryColor.withValues(alpha: 0.08), accentColor.withValues(alpha: 0.08)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
-          border: Border.all(color: primaryColor.withOpacity(0.3)),
-          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: primaryColor.withValues(alpha: 0.2)),
+          borderRadius: BorderRadius.circular(18),
+          boxShadow: [
+            BoxShadow(
+              color: primaryColor.withValues(alpha: 0.08),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
+            ),
+          ],
         ),
-        padding: const EdgeInsets.all(14),
+        padding: const EdgeInsets.all(16),
         child: Row(
           children: [
             Container(
               width: 60,
               height: 60,
               decoration: BoxDecoration(
-                color: accentColor.withOpacity(0.2),
+                color: accentColor.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Center(
@@ -78,7 +85,7 @@ class SpecialDealCard extends StatelessWidget {
                     'Berlaku hingga $validUntil',
                     style: TextStyle(
                       fontSize: 10,
-                      color: primaryColor.withOpacity(0.7),
+                      color: primaryColor.withValues(alpha: 0.7),
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -178,23 +185,23 @@ class _TestimonialCardState extends State<TestimonialCard> with SingleTickerProv
     return GestureDetector(
       onTap: () => _showFullComment(),
       child: Container(
-        margin: const EdgeInsets.only(right: 12),
+        margin: const EdgeInsets.only(right: 14),
         width: 280,
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(18),
           border: Border.all(
-            color: isLiked ? primaryColor : lightGrayColor,
+            color: isLiked ? primaryColor : lightGrayColor.withValues(alpha: 0.5),
             width: isLiked ? 2 : 1,
           ),
           boxShadow: [
             BoxShadow(
               color: isLiked
-                  ? primaryColor.withOpacity(0.2)
-                  : Colors.black.withOpacity(0.05),
-              blurRadius: isLiked ? 12 : 8,
-              offset: const Offset(0, 2),
+                  ? primaryColor.withValues(alpha: 0.15)
+                  : Colors.black.withValues(alpha: 0.06),
+              blurRadius: isLiked ? 16 : 12,
+              offset: const Offset(0, 4),
             ),
           ],
         ),
@@ -219,7 +226,7 @@ class _TestimonialCardState extends State<TestimonialCard> with SingleTickerProv
                   child: Container(
                     padding: const EdgeInsets.all(6),
                     decoration: BoxDecoration(
-                      color: isLiked ? primaryColor.withOpacity(0.2) : Colors.grey[100],
+                      color: isLiked ? primaryColor.withValues(alpha: 0.2) : Colors.grey[100],
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Icon(
@@ -253,7 +260,7 @@ class _TestimonialCardState extends State<TestimonialCard> with SingleTickerProv
                   width: 32,
                   height: 32,
                   decoration: BoxDecoration(
-                    color: primaryColor.withOpacity(0.1),
+                    color: primaryColor.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Center(
@@ -295,7 +302,7 @@ class _TestimonialCardState extends State<TestimonialCard> with SingleTickerProv
             Container(
               padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
               decoration: BoxDecoration(
-                color: Colors.blue.withOpacity(0.1),
+                color: Colors.blue.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(6),
               ),
               child: Row(
@@ -342,14 +349,14 @@ class LoyaltyCard extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [primaryColor, primaryColor.withOpacity(0.7)],
+          colors: [primaryColor, primaryColor.withValues(alpha: 0.7)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: primaryColor.withOpacity(0.3),
+            color: primaryColor.withValues(alpha: 0.3),
             blurRadius: 16,
             offset: const Offset(0, 8),
           ),
@@ -388,7 +395,7 @@ class LoyaltyCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2),
+                  color: Colors.white.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: const Icon(
@@ -431,7 +438,7 @@ class LoyaltyCard extends StatelessWidget {
                 child: LinearProgressIndicator(
                   value: progress,
                   minHeight: 8,
-                  backgroundColor: Colors.white.withOpacity(0.2),
+                  backgroundColor: Colors.white.withValues(alpha: 0.2),
                   valueColor: AlwaysStoppedAnimation<Color>(
                     accentColor,
                   ),
@@ -461,8 +468,8 @@ class TopRatedBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: accentColor.withOpacity(0.1),
-        border: Border.all(color: accentColor.withOpacity(0.5)),
+        color: accentColor.withValues(alpha: 0.1),
+        border: Border.all(color: accentColor.withValues(alpha: 0.5)),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Row(
@@ -586,7 +593,7 @@ class FeatureCard extends StatelessWidget {
           border: Border.all(color: lightGrayColor),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.03),
+              color: Colors.black.withValues(alpha: 0.03),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
@@ -599,7 +606,7 @@ class FeatureCard extends StatelessWidget {
               width: 44,
               height: 44,
               decoration: BoxDecoration(
-                color: primaryColor.withOpacity(0.1),
+                color: primaryColor.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Center(
@@ -632,3 +639,4 @@ class FeatureCard extends StatelessWidget {
     );
   }
 }
+

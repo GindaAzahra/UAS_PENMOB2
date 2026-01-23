@@ -1,0 +1,108 @@
+{
+  "restaurants": [
+    {
+      "id": 1,
+      "name": "Warung Nasi Enak",
+      "image_url": "https://images.unsplash.com/photo-1600891964599-f61ba0e24092",
+      "rating": 4.7,
+      "reviews": 124,
+      "description": "Warung nasi dengan resep tradisional."
+    },
+    {
+      "id": 2,
+      "name": "Kopi & Roti",
+      "image_url": "https://images.unsplash.com/photo-1600891964599-f61ba0e24092",
+      "rating": 4.5,
+      "reviews": 98,
+      "description": "Kafe nyaman untuk sarapan dan ngopi."
+    }
+  ],
+  "foods": [
+    {
+      "id": 1,
+      "restaurant_id": 1,
+      "name": "Nasi Goreng Spesial",
+      "category": "Makanan",
+      "price": 25000,
+      "rating": 4.8,
+      "reviews": 210,
+      "image_url": "https://images.unsplash.com/photo-1601050690596-4e1d0c3a8b4b",
+      "description": "Nasi goreng spesial dengan bumbu rahasia.",
+      "ingredients": ["nasi","telur","bawang","kecap"]
+    },
+    {
+      "id": 2,
+      "restaurant_id": 1,
+      "name": "Ayam Bakar",
+      "category": "Makanan",
+      "price": 30000,
+      "rating": 4.6,
+      "reviews": 76,
+      "image_url": "https://images.unsplash.com/photo-1544025162-d76694265947",
+      "description": "Ayam bakar madu.",
+      "ingredients": ["ayam","madu","bumbu"]
+    },
+    {
+      "id": 3,
+      "restaurant_id": 2,
+      "name": "Pancake Blueberry",
+      "category": "Dessert",
+      "price": 45000,
+      "rating": 4.4,
+      "reviews": 54,
+      "image_url": "https://images.unsplash.com/photo-1551782450-a2132b4ba21d",
+      "description": "Pancake lembut dengan topping blueberry.",
+      "ingredients": ["tepung","susu","blueberry"]
+    },
+    {
+      "id": 4,
+      "restaurant_id": 2,
+      "name": "Latte",
+      "category": "Minuman",
+      "price": 22000,
+      "rating": 4.5,
+      "reviews": 88,
+      "image_url": "https://images.unsplash.com/photo-1511920170033-f8396924c348",
+      "description": "Kopi latte creamy.",
+      "ingredients": ["kopi","susu"]
+    }
+  ],
+  "promos": [
+    {
+      "code": "WELCOME10",
+      "discount_percentage": 10.0,
+      "min_order_amount": 50000,
+      "description": "Diskon 10% untuk pesanan pertama",
+      "is_active": true
+    },
+    {
+      "code": "MIDNIGHT50",
+      "discount_percentage": 50.0,
+      "min_order_amount": 100000,
+      "description": "Diskon 50% untuk pesanan tengah malam",
+      "is_active": true
+    }
+  ],
+  "comments": [
+    {
+      "id": "c1",
+      "user_id": "",
+      "user_name": "Ginda",
+      "user_image": "",
+      "content": "Makanannya enak dan pelayanan cepat!",
+      "replies": [],
+      "like_count": 12,
+      "created_at": "2026-01-22T08:00:00Z"
+    },
+    {
+      "id": "c2",
+      "user_id": "",
+      "user_name": "User",
+      "user_image": "",
+      "content": "Suka pancake-nya, recommended.",
+      "replies": [],
+      "like_count": 4,
+      "created_at": "2026-01-21T10:00:00Z"
+    }
+  ]
+}

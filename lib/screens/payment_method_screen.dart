@@ -152,7 +152,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                             vertical: 4,
                           ),
                           decoration: BoxDecoration(
-                            color: primaryColor.withOpacity(0.1),
+                            color: primaryColor.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(6),
                           ),
                           child: const Text(
@@ -265,3 +265,4 @@ class _PaymentTypeButton extends StatelessWidget {
     );
   }
 }
+

@@ -38,7 +38,7 @@ class _SearchBarState extends State<SearchBar> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.06),
+            color: Colors.black.withValues(alpha: 0.06),
             blurRadius: 16,
             offset: const Offset(0, 4),
             spreadRadius: 0,
@@ -58,7 +58,7 @@ class _SearchBarState extends State<SearchBar> {
         decoration: InputDecoration(
           hintText: widget.hintText,
           hintStyle: TextStyle(
-            color: darkGrayColor.withOpacity(0.6),
+            color: darkGrayColor.withValues(alpha: 0.6),
             fontSize: 15,
             fontWeight: FontWeight.w400,
           ),
@@ -84,7 +84,7 @@ class _SearchBarState extends State<SearchBar> {
                       margin: const EdgeInsets.all(12),
                       child: Icon(
                         Icons.close_rounded,
-                        color: darkGrayColor.withOpacity(0.7),
+                        color: darkGrayColor.withValues(alpha: 0.7),
                         size: 20,
                       ),
                     ),
@@ -124,7 +124,7 @@ class CategoryChip extends StatelessWidget {
           decoration: BoxDecoration(
             gradient: isSelected
                 ? LinearGradient(
-                    colors: [primaryColor, primaryColor.withOpacity(0.8)],
+                    colors: [primaryColor, primaryColor.withValues(alpha: 0.8)],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   )
@@ -132,13 +132,13 @@ class CategoryChip extends StatelessWidget {
             color: isSelected ? null : Colors.white,
             borderRadius: BorderRadius.circular(24),
             border: Border.all(
-              color: isSelected ? primaryColor : lightGrayColor.withOpacity(0.5),
+              color: isSelected ? primaryColor : lightGrayColor.withValues(alpha: 0.5),
               width: isSelected ? 2 : 1.5,
             ),
             boxShadow: isSelected
                 ? [
                     BoxShadow(
-                      color: primaryColor.withOpacity(0.3),
+                      color: primaryColor.withValues(alpha: 0.3),
                       blurRadius: 12,
                       offset: const Offset(0, 4),
                       spreadRadius: 0,
@@ -146,7 +146,7 @@ class CategoryChip extends StatelessWidget {
                   ]
                 : [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.04),
+                      color: Colors.black.withValues(alpha: 0.04),
                       blurRadius: 6,
                       offset: const Offset(0, 2),
                     ),
@@ -281,3 +281,4 @@ class CustomTextFormField extends StatelessWidget {
     );
   }
 }
+

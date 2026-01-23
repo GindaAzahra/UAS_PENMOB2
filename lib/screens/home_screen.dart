@@ -7,7 +7,8 @@ import '../widgets/premium_widgets.dart';
 import '../services/auth_service.dart';
 import '../services/comment_service.dart';
 import '../services/cart_service.dart';
-import 'food_detail_screen.dart';
+import '../services/supabase_service.dart';
+import '../models/index.dart' as models;
 import 'enhanced_cart_screen.dart';
 import 'profile_screen.dart';
 import 'orders_screen.dart';
@@ -25,13 +26,14 @@ class _HomeScreenState extends State<HomeScreen> {
   String? userName;
   late CommentService _commentService;
   final CartService _cartService = CartService();
-  bool _isRefreshing = false;
+  late Future<List<models.Restaurant>> _restaurantsFuture;
 
   @override
   void initState() {
     super.initState();
     _loadUserName();
     _commentService = CommentService();
+    _restaurantsFuture = SupabaseService.getRestaurants();
     // Listen for comment changes so product comments appear automatically
     _commentService.addListener(_onCommentsUpdated);
     // Listen for cart changes
@@ -63,13 +65,6 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  Future<void> _refreshData() async {
-    setState(() => _isRefreshing = true);
-    await Future.delayed(const Duration(milliseconds: 1000));
-    _loadUserName();
-    setState(() => _isRefreshing = false);
-  }
-
   List<Map<String, dynamic>> get filteredFoods {
     final filtered = dummyFoods.where((food) {
       if (_searchQuery.isEmpty) return true;
@@ -98,81 +93,252 @@ class _HomeScreenState extends State<HomeScreen> {
               : _selectedIndex == 2
                   ? const OrdersScreen()
                   : const ProfileScreen(),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: Colors.white,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            activeIcon: Icon(Icons.home),
-            label: 'Home',
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(24),
+            topRight: Radius.circular(24),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart_outlined),
-            activeIcon: Icon(Icons.shopping_cart),
-            label: 'Keranjang',
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.06),
+              blurRadius: 24,
+              offset: const Offset(0, -6),
+              spreadRadius: 0,
+            ),
+          ],
+        ),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: BottomNavigationBar(
+                currentIndex: _selectedIndex,
+                onTap: (index) {
+                  setState(() {
+                    _selectedIndex = index;
+                  });
+                },
+                type: BottomNavigationBarType.fixed,
+                backgroundColor: Colors.white,
+                selectedItemColor: primaryColor,
+                unselectedItemColor: darkGrayColor,
+                selectedLabelStyle: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 12,
+                ),
+                unselectedLabelStyle: const TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 11,
+                ),
+                elevation: 0,
+                items: [
+                  BottomNavigationBarItem(
+                    icon: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: _selectedIndex == 0 ? primaryColor.withValues(alpha: 0.1) : Colors.transparent,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Icon(Icons.home_outlined, size: 24),
+                    ),
+                    activeIcon: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: primaryColor.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Icon(Icons.home, size: 24),
+                    ),
+                    label: 'Home',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: _selectedIndex == 1 ? primaryColor.withValues(alpha: 0.1) : Colors.transparent,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          const Icon(Icons.shopping_cart_outlined, size: 24),
+                          if (_cartService.items.isNotEmpty)
+                            Positioned(
+                              right: -6,
+                              top: -6,
+                              child: Container(
+                                padding: const EdgeInsets.all(4),
+                                decoration: const BoxDecoration(
+                                  color: errorColor,
+                                  shape: BoxShape.circle,
+                                ),
+                                constraints: const BoxConstraints(minWidth: 18, minHeight: 18),
+                                child: Text(
+                                  _cartService.totalItems.toString(),
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                    activeIcon: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: primaryColor.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          const Icon(Icons.shopping_cart, size: 24),
+                          if (_cartService.items.isNotEmpty)
+                            Positioned(
+                              right: -6,
+                              top: -6,
+                              child: Container(
+                                padding: const EdgeInsets.all(4),
+                                decoration: const BoxDecoration(
+                                  color: errorColor,
+                                  shape: BoxShape.circle,
+                                ),
+                                constraints: const BoxConstraints(minWidth: 18, minHeight: 18),
+                                child: Text(
+                                  _cartService.totalItems.toString(),
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                    label: 'Keranjang',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: _selectedIndex == 2 ? primaryColor.withValues(alpha: 0.1) : Colors.transparent,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Icon(Icons.receipt_long_outlined, size: 24),
+                    ),
+                    activeIcon: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: primaryColor.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Icon(Icons.receipt_long, size: 24),
+                    ),
+                    label: 'Pesanan',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: _selectedIndex == 3 ? primaryColor.withValues(alpha: 0.1) : Colors.transparent,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Icon(Icons.person_outline, size: 24),
+                    ),
+                    activeIcon: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: primaryColor.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Icon(Icons.person, size: 24),
+                    ),
+                    label: 'Profil',
+                  ),
+                ],
+              ),
+            ),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.receipt_outlined),
-            activeIcon: Icon(Icons.receipt),
-            label: 'Pesanan',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            activeIcon: Icon(Icons.person),
-            label: 'Profil',
-          ),
-        ],
+        ),
       ),
     );
   }
 
   Widget _buildHomeTab() {
     return CustomScrollView(
+      physics: const BouncingScrollPhysics(),
       slivers: [
         SliverAppBar(
           backgroundColor: Colors.white,
           elevation: 0,
           pinned: true,
-          expandedHeight: 90,
+          expandedHeight: 120,
           flexibleSpace: FlexibleSpaceBar(
             background: Container(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: [primaryColor, Color(0xFF00A86B)],
+                  colors: [primaryColor, primaryColor.withValues(alpha: 0.8), const Color(0xFF00C77B)],
                 ),
               ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(
-                      'Halo, ${userName ?? "Pelanggan"}! 👋',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+              child: SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withValues(alpha: 0.2),
+                              borderRadius: BorderRadius.circular(14),
+                            ),
+                            child: const Icon(Icons.restaurant_menu, color: Colors.white, size: 24),
+                          ),
+                          const SizedBox(width: 14),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Halo, ${userName ?? "Pelanggan"}! 👋',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w700,
+                                    letterSpacing: -0.3,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  'Mau makan apa hari ini?',
+                                  style: TextStyle(
+                                    color: Colors.white.withValues(alpha: 0.9),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    const SizedBox(height: 4),
-                    const Text(
-                      'Pesan makanan favorit Anda sekarang',
-                      style: TextStyle(
-                        color: Colors.white70,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -274,7 +440,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       );
                     },
                   );
-                }).toList(),
+                }),
                 const SizedBox(height: 24),
                 // Promo Banner
                 PromoBanner(
@@ -288,6 +454,105 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 ),
                 const SizedBox(height: 24),
+                // Restaurants from Supabase (or local fallback)
+                CategorySectionHeader(
+                  title: '🏠 Restoran Terdekat',
+                  subtitle: 'Pilihan tempat makan di sekitar',
+                ),
+                SizedBox(
+                  height: 220,
+                  child: FutureBuilder<List<models.Restaurant>>(
+                    future: _restaurantsFuture,
+                    builder: (context, snap) {
+                      if (snap.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+                      if (snap.hasError) {
+                        return Center(child: Text('Error: ${snap.error}'));
+                      }
+                      final restaurants = snap.data ?? [];
+                      if (restaurants.isEmpty) {
+                        return const Center(child: Text('Tidak ada restoran.'));
+                      }
+                      return ListView.separated(
+                        scrollDirection: Axis.horizontal,
+                        padding: const EdgeInsets.symmetric(horizontal: 4),
+                        itemBuilder: (context, i) {
+                          final r = restaurants[i];
+                          return Container(
+                            width: 260,
+                            margin: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
+                            child: Card(
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                                    child: r.imageUrl.isNotEmpty
+                                        ? Image.network(
+                                            r.imageUrl,
+                                            height: 120,
+                                            width: double.infinity,
+                                            fit: BoxFit.cover,
+                                            loadingBuilder: (context, child, loadingProgress) {
+                                              if (loadingProgress == null) return child;
+                                              return Container(
+                                                height: 120,
+                                                color: const Color(0xFFF2F2F2),
+                                                child: const Center(child: CircularProgressIndicator()),
+                                              );
+                                            },
+                                            errorBuilder: (context, error, stackTrace) {
+                                              return Container(
+                                                height: 120,
+                                                color: const Color(0xFFF2F2F2),
+                                                child: const Center(child: Icon(Icons.image_not_supported, size: 36)),
+                                              );
+                                            },
+                                          )
+                                        : Container(height: 120, color: const Color(0xFFF2F2F2)),
+                                  ),
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(12),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(r.name, style: const TextStyle(fontWeight: FontWeight.w700)),
+                                          const SizedBox(height: 6),
+                                          Expanded(
+                                            child: Text(r.description, maxLines: 2, overflow: TextOverflow.ellipsis),
+                                          ),
+                                          const SizedBox(height: 8),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  const Icon(Icons.star, size: 14, color: Colors.orange),
+                                                  const SizedBox(width: 4),
+                                                  Text(r.rating.toString()),
+                                                ],
+                                              ),
+                                              Text('Rp ${r.foods.isNotEmpty ? r.foods.first.price.toStringAsFixed(0) : '–'}', style: const TextStyle(fontWeight: FontWeight.w700, color: primaryColor)),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                        separatorBuilder: (_, __) => const SizedBox(width: 6),
+                        itemCount: restaurants.length,
+                      );
+                    },
+                  ),
+                ),
                 // Top Rated Foods
                 CategorySectionHeader(
                   title: '⭐ Makanan Pilihan',
@@ -387,7 +652,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           comment: testimonial['comment'],
                           date: testimonial['date'],
                         );
-                      }).toList(),
+                      }),
                       // Product comments as testimonials
                       ..._commentService.getAllProductComments().take(4).map((comment) {
                         return TestimonialCard(
@@ -397,17 +662,35 @@ class _HomeScreenState extends State<HomeScreen> {
                           comment: comment.content,
                           date: comment.createdAt.toString().split(' ')[0],
                         );
-                      }).toList(),
+                      }),
                     ],
                   ),
                 ),
-                const Text(
-                  'Makanan Populer',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                    color: textColor,
-                  ),
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      '🍽️ Makanan Populer',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                        color: textColor,
+                        letterSpacing: -0.3,
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {},
+                      child: const Text(
+                        'Lihat Semua',
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: primaryColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -418,9 +701,9 @@ class _HomeScreenState extends State<HomeScreen> {
           sliver: SliverGrid(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              crossAxisSpacing: 12,
-              mainAxisSpacing: 12,
-              childAspectRatio: 0.8,
+              crossAxisSpacing: 14,
+              mainAxisSpacing: 14,
+              childAspectRatio: 0.75,
             ),
             delegate: SliverChildBuilderDelegate(
               (context, index) {
@@ -450,3 +733,4 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+

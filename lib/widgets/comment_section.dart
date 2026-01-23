@@ -142,7 +142,7 @@ class _CommentSectionState extends State<CommentSection> {
                       height: 40,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: primaryColor.withOpacity(0.12),
+                        color: primaryColor.withValues(alpha: 0.12),
                       ),
                       alignment: Alignment.center,
                       child: const Text('👤', style: TextStyle(fontSize: 18)),
@@ -305,9 +305,9 @@ class _CommentCardState extends State<CommentCard> with SingleTickerProviderStat
                 height: 40,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: primaryColor.withOpacity(0.1),
+                  color: primaryColor.withValues(alpha: 0.1),
                   border: Border.all(
-                    color: primaryColor.withOpacity(0.3),
+                    color: primaryColor.withValues(alpha: 0.3),
                     width: 1.5,
                   ),
                 ),
@@ -391,7 +391,7 @@ class _CommentCardState extends State<CommentCard> with SingleTickerProviderStat
                       ),
                       decoration: BoxDecoration(
                         color: widget.comment.isLikedByUser
-                            ? primaryColor.withOpacity(0.1)
+                            ? primaryColor.withValues(alpha: 0.1)
                             : Colors.grey[100],
                         borderRadius: BorderRadius.circular(6),
                       ),
@@ -498,9 +498,9 @@ class _ReplyCard extends StatelessWidget {
           height: 30,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: accentColor.withOpacity(0.08),
+            color: accentColor.withValues(alpha: 0.08),
             border: Border.all(
-              color: accentColor.withOpacity(0.25),
+              color: accentColor.withValues(alpha: 0.25),
               width: 1,
             ),
           ),
@@ -548,3 +548,4 @@ class _ReplyCard extends StatelessWidget {
     );
   }
 }
+

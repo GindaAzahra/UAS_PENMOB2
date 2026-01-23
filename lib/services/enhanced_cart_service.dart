@@ -36,12 +36,12 @@ class EnhancedCartService {
     _saveToStorage();
   }
 
-  void removeItem(String foodId) {
+  void removeItem(int foodId) {
     _items.removeWhere((item) => item.food.id == foodId);
     _saveToStorage();
   }
 
-  void updateQuantity(String foodId, int quantity) {
+  void updateQuantity(int foodId, int quantity) {
     final index = _items.indexWhere((item) => item.food.id == foodId);
     if (index != -1) {
       if (quantity <= 0) {
@@ -188,7 +188,7 @@ class EnhancedCartService {
         await _prefs.remove('applied_promo');
       }
     } catch (e) {
-      print('Error saving cart: $e');
+      // Error saving cart
     }
   }
 
@@ -220,7 +220,7 @@ class EnhancedCartService {
         _appliedPromo = PromoCode.fromJson(decoded);
       }
     } catch (e) {
-      print('Error loading cart: $e');
+      // Error loading cart
     }
   }
 }

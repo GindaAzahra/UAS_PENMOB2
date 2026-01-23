@@ -41,7 +41,7 @@ class PrimaryButton extends StatelessWidget {
                 ? [Colors.grey[400]!, Colors.grey[500]!]
                 : [
                     backgroundColor ?? primaryColor,
-                    (backgroundColor ?? primaryColor).withOpacity(0.85),
+                    (backgroundColor ?? primaryColor).withValues(alpha: 0.85),
                   ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
@@ -49,7 +49,7 @@ class PrimaryButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(borderRadius),
             boxShadow: isLoading ? [] : [
               BoxShadow(
-                color: (backgroundColor ?? primaryColor).withOpacity(0.3),
+                color: (backgroundColor ?? primaryColor).withValues(alpha: 0.3),
                 blurRadius: 12,
                 offset: const Offset(0, 6),
                 spreadRadius: 0,
@@ -125,7 +125,7 @@ class SecondaryButton extends StatelessWidget {
           width: double.infinity,
           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
           decoration: BoxDecoration(
-            color: (borderColor ?? primaryColor).withOpacity(0.08),
+            color: (borderColor ?? primaryColor).withValues(alpha: 0.08),
             border: Border.all(
               color: borderColor ?? primaryColor,
               width: 2,
@@ -160,3 +160,4 @@ class SecondaryButton extends StatelessWidget {
     );
   }
 }
+

@@ -231,7 +231,7 @@ class _NotificationItem extends StatelessWidget {
         alignment: Alignment.centerRight,
         padding: const EdgeInsets.only(right: 20),
         decoration: BoxDecoration(
-          color: Colors.red.withOpacity(0.2),
+          color: Colors.red.withValues(alpha: 0.2),
           borderRadius: BorderRadius.circular(12),
         ),
         child: const Icon(
@@ -244,9 +244,9 @@ class _NotificationItem extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: isUnread ? primaryColor.withOpacity(0.05) : Colors.white,
+            color: isUnread ? primaryColor.withValues(alpha: 0.05) : Colors.white,
             border: Border.all(
-              color: isUnread ? primaryColor.withOpacity(0.2) : lightGrayColor,
+              color: isUnread ? primaryColor.withValues(alpha: 0.2) : lightGrayColor,
             ),
             borderRadius: BorderRadius.circular(12),
           ),
@@ -336,7 +336,7 @@ class _NotificationItem extends StatelessWidget {
                           notification['time'] as String,
                           style: TextStyle(
                             fontSize: 10,
-                            color: darkGrayColor.withOpacity(0.7),
+                            color: darkGrayColor.withValues(alpha: 0.7),
                           ),
                         ),
                         Container(
@@ -386,3 +386,4 @@ class _NotificationItem extends StatelessWidget {
     }
   }
 }
+

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'services/supabase_service.dart';
 import 'screens/splash_screen.dart';
 import 'screens/onboarding_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/login_screen.dart';
+import 'screens/register_screen.dart';
 import 'screens/search_screen.dart';
 import 'screens/enhanced_cart_screen.dart';
 import 'screens/checkout_screen.dart';
@@ -22,6 +24,7 @@ import 'utils/animations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await SupabaseService.initialize();
   runApp(const MyApp());
 }
 
@@ -44,6 +47,7 @@ class MyApp extends StatelessWidget {
         '/splash': (context) => const SplashScreen(),
         '/onboarding': (context) => const OnboardingScreen(),
         '/login': (context) => const LoginScreen(),
+        '/register': (context) => const RegisterScreen(),
         '/home': (context) => const HomeScreen(),
         '/cart': (context) => const EnhancedCartScreen(),
         '/checkout': (context) => const CheckoutScreen(),

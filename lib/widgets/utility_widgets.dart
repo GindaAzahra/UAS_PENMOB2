@@ -127,7 +127,7 @@ class PriceDisplay extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
             decoration: BoxDecoration(
-              color: errorColor.withOpacity(0.1),
+              color: errorColor.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(4),
             ),
             child: Text(
@@ -163,19 +163,19 @@ class StatusBadge extends StatelessWidget {
 
     switch (type) {
       case StatusType.success:
-        backgroundColor = successColor.withOpacity(0.1);
+        backgroundColor = successColor.withValues(alpha: 0.1);
         textStyleColor = successColor;
         break;
       case StatusType.warning:
-        backgroundColor = warningColor.withOpacity(0.1);
+        backgroundColor = warningColor.withValues(alpha: 0.1);
         textStyleColor = warningColor;
         break;
       case StatusType.error:
-        backgroundColor = errorColor.withOpacity(0.1);
+        backgroundColor = errorColor.withValues(alpha: 0.1);
         textStyleColor = errorColor;
         break;
       case StatusType.info:
-        backgroundColor = infoColor.withOpacity(0.1);
+        backgroundColor = infoColor.withValues(alpha: 0.1);
         textStyleColor = infoColor;
         break;
     }
@@ -323,9 +323,9 @@ class InfoCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: backgroundColor ?? primaryColor.withOpacity(0.05),
+          color: backgroundColor ?? primaryColor.withValues(alpha: 0.05),
           border: Border.all(
-            color: primaryColor.withOpacity(0.2),
+            color: primaryColor.withValues(alpha: 0.2),
           ),
           borderRadius: BorderRadius.circular(12),
         ),
@@ -335,7 +335,7 @@ class InfoCard extends StatelessWidget {
               width: 48,
               height: 48,
               decoration: BoxDecoration(
-                color: primaryColor.withOpacity(0.1),
+                color: primaryColor.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Center(
@@ -426,3 +426,4 @@ class DividerWithText extends StatelessWidget {
     );
   }
 }
+

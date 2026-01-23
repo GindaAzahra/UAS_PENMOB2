@@ -43,12 +43,12 @@ class _WalletPaymentScreenState extends State<WalletPaymentScreen> {
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: [primaryColor, primaryColor.withOpacity(0.8)],
+                  colors: [primaryColor, primaryColor.withValues(alpha: 0.8)],
                 ),
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: primaryColor.withOpacity(0.3),
+                    color: primaryColor.withValues(alpha: 0.3),
                     blurRadius: 20,
                     offset: const Offset(0, 10),
                   ),
@@ -365,7 +365,7 @@ class _WalletPaymentScreenState extends State<WalletPaymentScreen> {
                               color: (isDebit
                                       ? errorColor
                                       : Colors.green)
-                                  .withOpacity(0.1),
+                                  .withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(4),
                             ),
                             child: Text(
@@ -460,7 +460,7 @@ class _WalletActionButton extends StatelessWidget {
             width: 50,
             height: 50,
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.2),
+              color: Colors.white.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(25),
             ),
             child: Icon(icon, color: Colors.white, size: 24),
@@ -479,3 +479,4 @@ class _WalletActionButton extends StatelessWidget {
     );
   }
 }
+

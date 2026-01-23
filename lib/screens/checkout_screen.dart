@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../utils/constants.dart';
 import '../widgets/buttons.dart';
+import '../services/order_service.dart';
+import '../services/cart_service.dart';
 
 class CheckoutScreen extends StatefulWidget {
   const CheckoutScreen({super.key});
@@ -15,6 +17,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> with TickerProviderStat
   bool isProcessing = false;
   late AnimationController _paymentController;
   late AnimationController _successController;
+  final OrderService _orderService = OrderService();
+  final CartService _cartService = CartService();
+  OrderModel? _createdOrder;
 
   @override
   void initState() {
@@ -154,7 +159,18 @@ class _CheckoutScreenState extends State<CheckoutScreen> with TickerProviderStat
   }
 
   void _processPayment() async {
+    print('💳 [CheckoutScreen] ========== PAYMENT PROCESS START ==========');
+    print('💳 [CheckoutScreen] Cart items: ${_cartService.items.length}');
+    
+    // Validasi cart tidak kosong
+    if (_cartService.items.isEmpty) {
+      print('❌ [CheckoutScreen] Cart is empty!');
+      _showErrorDialog('Keranjang kosong. Tambahkan item terlebih dahulu.');
+      return;
+    }
+    
     if (!agreeTerms) {
+      print('❌ [CheckoutScreen] Terms not agreed');
       _showErrorDialog('Mohon setujui syarat dan ketentuan terlebih dahulu');
       return;
     }
@@ -162,12 +178,50 @@ class _CheckoutScreenState extends State<CheckoutScreen> with TickerProviderStat
     setState(() => isProcessing = true);
     _paymentController.forward();
 
+    print('💳 [CheckoutScreen] Simulating payment (3 seconds)...');
     // Simulate payment processing
     await Future.delayed(const Duration(seconds: 3));
 
     if (mounted) {
       _paymentController.reset();
-      _showPaymentSuccessDialog();
+      
+      print('💳 [CheckoutScreen] Payment simulation complete, calling createOrderFromCart...');
+      // Create and save order to OrderService and Supabase
+      try {
+        print('💳 [CheckoutScreen] Cart data: items=${_cartService.items.length}, total=${_cartService.total}');
+        
+        _createdOrder = await _orderService.createOrderFromCart(
+          cartService: _cartService,
+          deliveryAddress: 'Jl. Merdeka No. 123, Kelurahan Sentosa, Kecamatan Maju, Jakarta Selatan',
+          restaurantId: null,
+          status: 'pending',
+        );
+        
+        print('💳 [CheckoutScreen] createOrderFromCart returned: ${_createdOrder != null ? 'SUCCESS' : 'NULL'}');
+        
+        if (_createdOrder != null) {
+          print('💳 [CheckoutScreen] ✅ Order created: ${_createdOrder?.id}');
+          print('💳 [CheckoutScreen] Clearing cart...');
+          
+          _cartService.clear();
+          
+          print('💳 [CheckoutScreen] ✅ Cart cleared, items now: ${_cartService.items.length}');
+          print('💳 [CheckoutScreen] ========== SHOWING SUCCESS DIALOG ==========');
+          
+          _showPaymentSuccessDialog();
+        } else {
+          print('💳 [CheckoutScreen] ❌ createOrderFromCart returned NULL');
+          _showErrorDialog('Gagal membuat pesanan. Silakan coba lagi.');
+        }
+      } catch (e) {
+        print('❌ [CheckoutScreen] Exception: $e');
+        print('❌ [CheckoutScreen] Stack: ${StackTrace.current}');
+        _showErrorDialog('Gagal membuat pesanan: ${e.toString()}');
+      }
+      
+      setState(() => isProcessing = false);
+    } else {
+      print('❌ [CheckoutScreen] Widget not mounted!');
     }
   }
 
@@ -182,7 +236,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> with TickerProviderStat
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: Colors.red.withOpacity(0.2),
+                color: Colors.red.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: const Icon(Icons.error_outline, color: Colors.red),
@@ -207,8 +261,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> with TickerProviderStat
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) => WillPopScope(
-        onWillPop: () async => false,
+      builder: (context) => PopScope(
+        canPop: false,
         child: Dialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
           insetPadding: const EdgeInsets.symmetric(horizontal: 20),
@@ -255,7 +309,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> with TickerProviderStat
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: Text(
-                    'Pesanan Anda telah dikonfirmasi.\nNomor pesanan: #ORD-2024-001',
+                    _createdOrder != null
+                        ? 'Pesanan Anda telah dikonfirmasi.\nNomor pesanan: #${_createdOrder!.id}'
+                        : 'Pesanan Anda telah dikonfirmasi.\nNomor pesanan: #ORD-000',
                     style: TextStyle(
                       fontSize: 14,
                       color: darkGrayColor,
@@ -296,9 +352,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> with TickerProviderStat
                                 ),
                               ),
                               const SizedBox(height: 10),
-                              const Text(
-                                'Rp 79,800',
-                                style: TextStyle(
+                              Text(
+                                _createdOrder != null
+                                    ? 'Rp ${_createdOrder!.total.toStringAsFixed(0)}'
+                                    : 'Rp 0',
+                                style: const TextStyle(
                                   fontWeight: FontWeight.w700,
                                   fontSize: 15,
                                   color: textColor,
@@ -306,7 +364,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> with TickerProviderStat
                               ),
                               const SizedBox(height: 4),
                               Text(
-                                'Kartu Kredit',
+                                _createdOrder != null ? 'Pembayaran Online' : 'Kartu Kredit',
                                 style: TextStyle(
                                   fontSize: 12,
                                   color: darkGrayColor,
@@ -379,6 +437,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> with TickerProviderStat
                           onPressed: () {
                             Navigator.pop(context);
                             Navigator.pop(context);
+                            Navigator.pushNamed(context, '/orders');
                           },
                           style: OutlinedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(vertical: 14),
@@ -388,7 +447,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> with TickerProviderStat
                             side: const BorderSide(color: primaryColor, width: 1.5),
                           ),
                           child: const Text(
-                            'Kembali',
+                            'Lihat Pesanan',
                             style: TextStyle(
                               color: primaryColor,
                               fontWeight: FontWeight.w700,
@@ -462,6 +521,86 @@ class _CheckoutScreenState extends State<CheckoutScreen> with TickerProviderStat
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Order Summary - Display Cart Items
+            const Text(
+              'Item Pesanan',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                color: textColor,
+              ),
+            ),
+            const SizedBox(height: 12),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(14),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withAlpha(10),
+                    blurRadius: 10,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              padding: const EdgeInsets.all(16),
+              child: _cartService.items.isEmpty
+                  ? const Center(
+                      child: Text(
+                        'Keranjang kosong',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: darkGrayColor,
+                        ),
+                      ),
+                    )
+                  : Column(
+                      children: [
+                        ..._cartService.items.map((item) {
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 12),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        item.foodName,
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600,
+                                          color: textColor,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        'x${item.quantity}',
+                                        style: const TextStyle(
+                                          fontSize: 12,
+                                          color: darkGrayColor,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Text(
+                                  'Rp ${(item.price * item.quantity).toStringAsFixed(0)}',
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w700,
+                                    color: textColor,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        }).toList(),
+                      ],
+                    ),
+            ),
+            const SizedBox(height: 24),
             // Delivery Address
             const Text(
               'Alamat Pengiriman',
@@ -553,17 +692,17 @@ class _CheckoutScreenState extends State<CheckoutScreen> with TickerProviderStat
               padding: const EdgeInsets.all(16),
               child: Column(
                 children: [
-                  _buildPricingRow('Subtotal', 'Rp 68,000'),
+                  _buildPricingRow('Subtotal', 'Rp ${_cartService.subtotal.toStringAsFixed(0)}'),
                   const SizedBox(height: 12),
-                  _buildPricingRow('Pajak (10%)', 'Rp 6,800', isDark: true),
+                  _buildPricingRow('Pajak (10%)', 'Rp ${_cartService.tax.toStringAsFixed(0)}', isDark: true),
                   const SizedBox(height: 12),
-                  _buildPricingRow('Ongkir', 'Rp 5,000', isDark: true),
+                  _buildPricingRow('Ongkir', 'Rp ${_cartService.deliveryFee.toStringAsFixed(0)}', isDark: true),
                   const SizedBox(height: 14),
                   Divider(color: darkGrayColor.withAlpha(50), height: 1),
                   const SizedBox(height: 14),
                   _buildPricingRow(
                     'Total Pembayaran',
-                    'Rp 79,800',
+                    'Rp ${_cartService.total.toStringAsFixed(0)}',
                     isTotal: true,
                   ),
                 ],
@@ -706,9 +845,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> with TickerProviderStat
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Colors.blue.withOpacity(0.1),
+                  color: Colors.blue.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.blue.withOpacity(0.3)),
+                  border: Border.all(color: Colors.blue.withValues(alpha: 0.3)),
                 ),
                 child: Row(
                   children: [
@@ -716,7 +855,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> with TickerProviderStat
                       width: 24,
                       height: 24,
                       child: CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation(Colors.blue.withOpacity(0.7)),
+                        valueColor: AlwaysStoppedAnimation(Colors.blue.withValues(alpha: 0.7)),
                         strokeWidth: 2,
                       ),
                     ),
@@ -737,7 +876,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> with TickerProviderStat
                           'Harap tunggu beberapa saat',
                           style: TextStyle(
                             fontSize: 11,
-                            color: Colors.blue.withOpacity(0.7),
+                            color: Colors.blue.withValues(alpha: 0.7),
                           ),
                         ),
                       ],
@@ -748,7 +887,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> with TickerProviderStat
             if (isProcessing) const SizedBox(height: 16),
             PrimaryButton(
               label: isProcessing ? 'Memproses...' : 'Konfirmasi Pembayaran',
-              onPressed: isProcessing ? () {} : _processPayment,
+              onPressed: (isProcessing || _cartService.items.isEmpty) ? () {} : _processPayment,
             ),
           ],
         ),
@@ -860,3 +999,4 @@ class _TermsSection extends StatelessWidget {
     );
   }
 }
+

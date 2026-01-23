@@ -1,14 +1,70 @@
 import 'package:flutter/material.dart';
 import '../utils/constants.dart';
+import '../services/order_service.dart';
+import 'order_tracking_screen.dart';
 
 class OrdersScreen extends StatefulWidget {
-  const OrdersScreen({super.key});
+  final String? highlightOrderId;
+  final bool showBackButton;
+  
+  const OrdersScreen({super.key, this.highlightOrderId, this.showBackButton = false});
 
   @override
   State<OrdersScreen> createState() => _OrdersScreenState();
 }
 
-class _OrdersScreenState extends State<OrdersScreen> {
+class _OrdersScreenState extends State<OrdersScreen> with WidgetsBindingObserver {
+  final OrderService _orderService = OrderService();
+  List<OrderModel> _allOrders = [];
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    // Load orders dari Supabase saat screen pertama kali dibuka
+    _loadOrders();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      // Refresh orders ketika screen kembali visible
+      _loadOrders();
+    }
+  }
+
+  void _loadOrders() async {
+    print('📋 [OrdersScreen] Loading orders from Supabase...');
+    
+    // Load orders dari Supabase
+    await _orderService.loadOrders();
+    
+    // Check if widget is still mounted before calling setState
+    if (!mounted) return;
+    
+    // Gunakan hanya service orders (data dari Supabase)
+    final serviceOrders = _orderService.orders;
+    
+    print('📋 [OrdersScreen] Service orders count: ${serviceOrders.length}');
+    print('📋 [OrdersScreen] Service orders: ${serviceOrders.map((o) => o.id).toList()}');
+    
+    // Sort orders by date (newest first)
+    final sortedOrders = [...serviceOrders];
+    sortedOrders.sort((a, b) => b.orderedAt.compareTo(a.orderedAt));
+    
+    setState(() {
+      _allOrders = sortedOrders;
+    });
+    
+    print('📋 [OrdersScreen] Total orders displayed: ${_allOrders.length}');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,37 +72,126 @@ class _OrdersScreenState extends State<OrdersScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        title: const Text(
-          'Pesanan Saya',
-          style: TextStyle(
-            color: textColor,
-            fontWeight: FontWeight.w700,
-            fontSize: 18,
-          ),
+        automaticallyImplyLeading: false,
+        title: const Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.receipt_long_rounded, color: primaryColor, size: 22),
+            SizedBox(width: 10),
+            Text(
+              'Pesanan Saya',
+              style: TextStyle(
+                color: textColor,
+                fontWeight: FontWeight.w700,
+                fontSize: 18,
+                letterSpacing: -0.3,
+              ),
+            ),
+          ],
         ),
         centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: primaryColor),
-          onPressed: () => Navigator.pop(context),
-        ),
+        leading: widget.showBackButton 
+            ? IconButton(
+                icon: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: primaryColor.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Icon(Icons.arrow_back_ios_new_rounded, color: primaryColor, size: 18),
+                ),
+                onPressed: () => Navigator.pop(context),
+              )
+            : null,
       ),
-      body: ListView.builder(
-        padding: const EdgeInsets.all(16),
-        itemCount: dummyOrders.length,
-        itemBuilder: (context, index) {
-          final order = dummyOrders[index];
-          return _OrderCard(
-            order: order,
-            onDetailTap: () {
-              _showOrderDetail(context, order);
-            },
-          );
-        },
-      ),
+      body: _allOrders.isEmpty
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(24),
+                    decoration: BoxDecoration(
+                      color: primaryColor.withValues(alpha: 0.08),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      Icons.receipt_long_rounded,
+                      size: 60,
+                      color: primaryColor.withValues(alpha: 0.5),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  const Text(
+                    'Belum Ada Pesanan',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                      color: textColor,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Pesanan Anda akan muncul di sini',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey[500],
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  const SizedBox(height: 32),
+                  ElevatedButton(
+                    onPressed: () => Navigator.pushReplacementNamed(context, '/home'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: primaryColor,
+                      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      elevation: 0,
+                    ),
+                    child: const Text(
+                      'Mulai Pesan',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          : ListView.builder(
+              padding: const EdgeInsets.all(16),
+              itemCount: _allOrders.length,
+              itemBuilder: (context, index) {
+                final order = _allOrders[index];
+                final isHighlighted = widget.highlightOrderId == order.id;
+                return _OrderCard(
+                  order: order,
+                  isHighlighted: isHighlighted,
+                  onDetailTap: () {
+                    _showOrderDetail(context, order);
+                  },
+                  onTrackTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => OrderTrackingScreen(
+                          orderId: order.id,
+                          orderData: order,
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
     );
   }
 
-  void _showOrderDetail(BuildContext context, Map<String, dynamic> order) {
+  void _showOrderDetail(BuildContext context, OrderModel order) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -84,15 +229,19 @@ class _OrdersScreenState extends State<OrdersScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            order['id'],
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: textColor,
+                          Expanded(
+                            child: Text(
+                              order.id,
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: textColor,
+                              ),
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
-                          _StatusBadge(status: order['status']),
+                          const SizedBox(width: 8),
+                          _StatusBadge(status: order.status),
                         ],
                       ),
                       const SizedBox(height: 16),
@@ -106,7 +255,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        order['date'],
+                        order.date,
                         style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
@@ -123,25 +272,11 @@ class _OrdersScreenState extends State<OrdersScreen> {
                         ),
                       ),
                       const SizedBox(height: 12),
-                      ...List.generate(
-                        order['items'].length,
-                        (i) => Padding(
-                          padding: const EdgeInsets.only(bottom: 8),
-                          child: Container(
-                            padding: const EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                              color: Colors.grey[50],
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(color: Colors.grey[200]!),
-                            ),
-                            child: Text(
-                              '${i + 1}. ${order['items'][i]}',
-                              style: const TextStyle(
-                                fontSize: 13,
-                                color: textColor,
-                              ),
-                            ),
-                          ),
+                      Text(
+                        order.itemsDisplay,
+                        style: const TextStyle(
+                          fontSize: 13,
+                          color: textColor,
                         ),
                       ),
                       const SizedBox(height: 20),
@@ -166,7 +301,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                   ),
                                 ),
                                 Text(
-                                  'Rp ${(order['total'] * 0.9).toStringAsFixed(0)}',
+                                  'Rp ${order.subtotal.toStringAsFixed(0)}',
                                   style: const TextStyle(
                                     fontSize: 13,
                                     fontWeight: FontWeight.w500,
@@ -187,7 +322,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                   ),
                                 ),
                                 Text(
-                                  'Rp ${(order['total'] * 0.1).toStringAsFixed(0)}',
+                                  'Rp ${order.shippingCost.toStringAsFixed(0)}',
                                   style: const TextStyle(
                                     fontSize: 13,
                                     fontWeight: FontWeight.w500,
@@ -209,7 +344,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                   ),
                                 ),
                                 Text(
-                                  'Rp ${order['total'].toStringAsFixed(0)}',
+                                  'Rp ${order.total.toStringAsFixed(0)}',
                                   style: const TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w700,
@@ -234,12 +369,16 @@ class _OrdersScreenState extends State<OrdersScreen> {
 }
 
 class _OrderCard extends StatelessWidget {
-  final Map<String, dynamic> order;
+  final OrderModel order;
   final VoidCallback onDetailTap;
+  final VoidCallback? onTrackTap;
+  final bool isHighlighted;
 
   const _OrderCard({
     required this.order,
     required this.onDetailTap,
+    this.onTrackTap,
+    this.isHighlighted = false,
   });
 
   @override
@@ -249,12 +388,18 @@ class _OrderCard extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(16),
+          border: isHighlighted 
+              ? Border.all(color: primaryColor, width: 2)
+              : null,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.06),
-              blurRadius: 10,
-              offset: const Offset(0, 2),
+              color: isHighlighted 
+                  ? primaryColor.withValues(alpha: 0.15)
+                  : Colors.black.withValues(alpha: 0.06),
+              blurRadius: isHighlighted ? 16 : 12,
+              offset: const Offset(0, 4),
+              spreadRadius: 0,
             ),
           ],
         ),
@@ -264,13 +409,13 @@ class _OrderCard extends StatelessWidget {
           Container(
             width: double.infinity,
               padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-              color: _getStatusColor(order['status']).withOpacity(0.08),
+              color: _getStatusColor(order.status).withValues(alpha: 0.08),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  _StatusBadge(status: order['status']),
+                  _StatusBadge(status: order.status),
                   Text(
-                    order['date'],
+                    order.date,
                     style: TextStyle(
                       fontSize: 12,
                       color: Colors.grey[600],
@@ -289,7 +434,7 @@ class _OrderCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        order['id'],
+                        order.id,
                         style: const TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w700,
@@ -299,15 +444,15 @@ class _OrderCard extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                         decoration: BoxDecoration(
-                          color: _getStatusColor(order['status']).withOpacity(0.15),
+                          color: _getStatusColor(order.status).withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: Text(
-                          order['status'],
+                          order.status,
                           style: TextStyle(
                             fontSize: 11,
                             fontWeight: FontWeight.w600,
-                            color: _getStatusColor(order['status']),
+                            color: _getStatusColor(order.status),
                           ),
                         ),
                       ),
@@ -315,17 +460,11 @@ class _OrderCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 12),
                   // Items Preview
-                  ...List.generate(
-                    order['items'].length,
-                    (i) => Padding(
-                      padding: const EdgeInsets.only(bottom: 6),
-                      child: Text(
-                        '• ${order['items'][i]}',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey[600],
-                        ),
-                      ),
+                  Text(
+                    order.itemsDisplay,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey[600],
                     ),
                   ),
                   const SizedBox(height: 12),
@@ -334,35 +473,66 @@ class _OrderCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(
-                        'Total: Rp ${order['total'].toStringAsFixed(0)}',
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700,
-                          color: primaryColor,
+                      Expanded(
+                        child: Text(
+                          'Total: Rp ${order.total.toStringAsFixed(0)}',
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            color: primaryColor,
+                          ),
                         ),
                       ),
-                      ElevatedButton(
-                        onPressed: onDetailTap,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: primaryColor,
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 8,
+                      Row(
+                        children: [
+                          // Show Track button for in-progress orders
+                          if (order.status.toLowerCase() == 'in progress' && onTrackTap != null) ...[
+                            OutlinedButton(
+                              onPressed: onTrackTap,
+                              style: OutlinedButton.styleFrom(
+                                foregroundColor: primaryColor,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 8,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                side: const BorderSide(color: primaryColor),
+                              ),
+                              child: const Text(
+                                'Lacak',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                          ],
+                          ElevatedButton(
+                            onPressed: onDetailTap,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: primaryColor,
+                              foregroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 8,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              elevation: 0,
+                            ),
+                            child: const Text(
+                              'Detail',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
                           ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          elevation: 0,
-                        ),
-                        child: const Text(
-                          'Detail',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
+                        ],
                       ),
                     ],
                   ),
@@ -426,10 +596,10 @@ class _StatusBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: statusColor.withOpacity(0.15),
+        color: statusColor.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: statusColor.withOpacity(0.3),
+          color: statusColor.withValues(alpha: 0.3),
         ),
       ),
       child: Row(
@@ -454,3 +624,4 @@ class _StatusBadge extends StatelessWidget {
     );
   }
 }
+

@@ -119,7 +119,7 @@ class _LoyaltyProgramScreenState extends State<LoyaltyProgramScreen>
                   width: 50,
                   height: 50,
                   decoration: BoxDecoration(
-                    color: primaryColor.withOpacity(0.1),
+                    color: primaryColor.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Center(
@@ -188,7 +188,7 @@ class _LoyaltyProgramScreenState extends State<LoyaltyProgramScreen>
                   width: 44,
                   height: 44,
                   decoration: BoxDecoration(
-                    color: (isPositive ? primaryColor : errorColor).withOpacity(0.1),
+                    color: (isPositive ? primaryColor : errorColor).withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Center(
@@ -287,7 +287,7 @@ class _LoyaltyProgramScreenState extends State<LoyaltyProgramScreen>
             margin: const EdgeInsets.only(bottom: 12),
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
-              color: isActive ? primaryColor.withOpacity(0.1) : Colors.white,
+              color: isActive ? primaryColor.withValues(alpha: 0.1) : Colors.white,
               border: Border.all(
                 color: isActive ? primaryColor : lightGrayColor,
                 width: isActive ? 2 : 1,
@@ -391,3 +391,4 @@ class _LoyaltyProgramScreenState extends State<LoyaltyProgramScreen>
     }
   }
 }
+

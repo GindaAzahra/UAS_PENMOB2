@@ -57,14 +57,14 @@ class _ReferralProgramScreenState extends State<ReferralProgramScreen> {
               child: Container(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [primaryColor, primaryColor.withOpacity(0.7)],
+                    colors: [primaryColor, primaryColor.withValues(alpha: 0.7)],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color: primaryColor.withOpacity(0.3),
+                      color: primaryColor.withValues(alpha: 0.3),
                       blurRadius: 12,
                       offset: const Offset(0, 6),
                     ),
@@ -133,7 +133,7 @@ class _ReferralProgramScreenState extends State<ReferralProgramScreen> {
                                 vertical: 4,
                               ),
                               decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.2),
+                                color: Colors.white.withValues(alpha: 0.2),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: const Text(
@@ -223,7 +223,7 @@ class _ReferralProgramScreenState extends State<ReferralProgramScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
                     decoration: BoxDecoration(
                       color: backgroundColor,
-                      border: Border.all(color: primaryColor.withOpacity(0.3)),
+                      border: Border.all(color: primaryColor.withValues(alpha: 0.3)),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Row(
@@ -323,7 +323,7 @@ class _ReferralProgramScreenState extends State<ReferralProgramScreen> {
                           decoration: BoxDecoration(
                             color: Colors.white,
                             border: Border.all(
-                              color: isCompleted ? successColor.withOpacity(0.3) : warningColor.withOpacity(0.3),
+                              color: isCompleted ? successColor.withValues(alpha: 0.3) : warningColor.withValues(alpha: 0.3),
                             ),
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -333,7 +333,7 @@ class _ReferralProgramScreenState extends State<ReferralProgramScreen> {
                                 width: 44,
                                 height: 44,
                                 decoration: BoxDecoration(
-                                  color: primaryColor.withOpacity(0.1),
+                                  color: primaryColor.withValues(alpha: 0.1),
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: const Center(
@@ -383,8 +383,8 @@ class _ReferralProgramScreenState extends State<ReferralProgramScreen> {
                                     ),
                                     decoration: BoxDecoration(
                                       color: isCompleted
-                                          ? successColor.withOpacity(0.1)
-                                          : warningColor.withOpacity(0.1),
+                                          ? successColor.withValues(alpha: 0.1)
+                                          : warningColor.withValues(alpha: 0.1),
                                       borderRadius: BorderRadius.circular(4),
                                     ),
                                     child: Text(
@@ -439,7 +439,7 @@ class _HowItWorksStep extends StatelessWidget {
             width: 50,
             height: 50,
             decoration: BoxDecoration(
-              color: primaryColor.withOpacity(0.1),
+              color: primaryColor.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Center(
@@ -499,3 +499,4 @@ class _HowItWorksStep extends StatelessWidget {
     );
   }
 }
+

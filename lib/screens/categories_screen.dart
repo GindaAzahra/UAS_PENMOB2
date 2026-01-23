@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../utils/constants.dart';
 import '../widgets/cards.dart';
-import 'food_detail_screen.dart';
 
 class CategoriesScreen extends StatefulWidget {
   const CategoriesScreen({super.key});

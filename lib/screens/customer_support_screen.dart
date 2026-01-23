@@ -42,9 +42,7 @@ class _CustomerSupportScreenState extends State<CustomerSupportScreen> {
         'id': messages.length + 1,
         'message': _messageController.text,
         'isUser': true,
-        'time': DateTime.now().hour.toString().padLeft(2, '0') +
-            ':' +
-            DateTime.now().minute.toString().padLeft(2, '0'),
+        'time': '${DateTime.now().hour.toString().padLeft(2, '0')}:${DateTime.now().minute.toString().padLeft(2, '0')}',
         'timestamp': DateTime.now(),
       });
       _messageController.clear();
@@ -57,9 +55,7 @@ class _CustomerSupportScreenState extends State<CustomerSupportScreen> {
               'id': messages.length + 1,
               'message': 'Terima kasih atas pertanyaannya. Tim kami sedang memproses...',
               'isUser': false,
-              'time': DateTime.now().hour.toString().padLeft(2, '0') +
-                  ':' +
-                  DateTime.now().minute.toString().padLeft(2, '0'),
+              'time': '${DateTime.now().hour.toString().padLeft(2, '0')}:${DateTime.now().minute.toString().padLeft(2, '0')}',
               'timestamp': DateTime.now(),
             });
           });
@@ -107,7 +103,7 @@ class _CustomerSupportScreenState extends State<CustomerSupportScreen> {
                   width: 60,
                   height: 60,
                   decoration: BoxDecoration(
-                    color: primaryColor.withOpacity(0.1),
+                    color: primaryColor.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(30),
                   ),
                   child: const Center(
@@ -127,7 +123,7 @@ class _CustomerSupportScreenState extends State<CustomerSupportScreen> {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
-                    color: successColor.withOpacity(0.1),
+                    color: successColor.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: const Text(
@@ -165,7 +161,7 @@ class _CustomerSupportScreenState extends State<CustomerSupportScreen> {
                           width: 32,
                           height: 32,
                           decoration: BoxDecoration(
-                            color: primaryColor.withOpacity(0.1),
+                            color: primaryColor.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(16),
                           ),
                           child: const Center(
@@ -202,7 +198,7 @@ class _CustomerSupportScreenState extends State<CustomerSupportScreen> {
                                 style: TextStyle(
                                   fontSize: 10,
                                   color: isUser
-                                      ? Colors.white.withOpacity(0.7)
+                                      ? Colors.white.withValues(alpha: 0.7)
                                       : darkGrayColor,
                                 ),
                               ),
@@ -301,8 +297,8 @@ class _QuickReplyButton extends StatelessWidget {
         margin: const EdgeInsets.only(right: 8),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
-          color: primaryColor.withOpacity(0.1),
-          border: Border.all(color: primaryColor.withOpacity(0.3)),
+          color: primaryColor.withValues(alpha: 0.1),
+          border: Border.all(color: primaryColor.withValues(alpha: 0.3)),
           borderRadius: BorderRadius.circular(20),
         ),
         child: Text(
@@ -317,3 +313,4 @@ class _QuickReplyButton extends StatelessWidget {
     );
   }
 }
+

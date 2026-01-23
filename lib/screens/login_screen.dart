@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/gestures.dart';
 import '../services/auth_service.dart';
+import 'register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -71,17 +73,17 @@ class _LoginScreenState extends State<LoginScreen>
     });
 
     final authService = AuthService();
-    final success = await authService.login(
+    final result = await authService.login(
       _emailController.text,
       _passwordController.text,
     );
 
     if (mounted) {
-      if (success) {
+      if (result['success']) {
         Navigator.of(context).pushReplacementNamed('/home');
       } else {
         setState(() {
-          _errorMessage = 'Email atau password salah';
+          _errorMessage = result['message'] ?? 'Login gagal. Silakan coba lagi.';
           _isLoading = false;
         });
       }
@@ -102,8 +104,8 @@ class _LoginScreenState extends State<LoginScreen>
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              const Color(0xFF00A86B).withOpacity(0.95),
-              const Color(0xFF2E5090).withOpacity(0.95),
+              const Color(0xFF00A86B).withValues(alpha: 0.95),
+              const Color(0xFF2E5090).withValues(alpha: 0.95),
             ],
           ),
         ),
@@ -121,7 +123,7 @@ class _LoginScreenState extends State<LoginScreen>
                     height: 300,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Colors.white.withOpacity(0.1),
+                      color: Colors.white.withValues(alpha: 0.1),
                     ),
                   ),
                 ),
@@ -133,7 +135,7 @@ class _LoginScreenState extends State<LoginScreen>
                     height: 350,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Colors.white.withOpacity(0.08),
+                      color: Colors.white.withValues(alpha: 0.08),
                     ),
                   ),
                 ),
@@ -162,7 +164,7 @@ class _LoginScreenState extends State<LoginScreen>
                                   color: Colors.white,
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Colors.black.withOpacity(0.2),
+                                      color: Colors.black.withValues(alpha: 0.2),
                                       blurRadius: 20,
                                       offset: const Offset(0, 10),
                                     ),
@@ -189,7 +191,7 @@ class _LoginScreenState extends State<LoginScreen>
                                 'Pesan Makanan, Nikmati Kelezatan',
                                 style: TextStyle(
                                   fontSize: 14,
-                                  color: Colors.white.withOpacity(0.8),
+                                  color: Colors.white.withValues(alpha: 0.8),
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
@@ -207,7 +209,7 @@ class _LoginScreenState extends State<LoginScreen>
                                 child: Text(
                                   'Email',
                                   style: TextStyle(
-                                    color: Colors.white.withOpacity(0.9),
+                                    color: Colors.white.withValues(alpha: 0.9),
                                     fontWeight: FontWeight.w600,
                                     fontSize: 14,
                                   ),
@@ -218,7 +220,7 @@ class _LoginScreenState extends State<LoginScreen>
                                   borderRadius: BorderRadius.circular(12),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Colors.black.withOpacity(0.15),
+                                      color: Colors.black.withValues(alpha: 0.15),
                                       blurRadius: 10,
                                       offset: const Offset(0, 5),
                                     ),
@@ -270,7 +272,7 @@ class _LoginScreenState extends State<LoginScreen>
                                 child: Text(
                                   'Password',
                                   style: TextStyle(
-                                    color: Colors.white.withOpacity(0.9),
+                                    color: Colors.white.withValues(alpha: 0.9),
                                     fontWeight: FontWeight.w600,
                                     fontSize: 14,
                                   ),
@@ -281,7 +283,7 @@ class _LoginScreenState extends State<LoginScreen>
                                   borderRadius: BorderRadius.circular(12),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Colors.black.withOpacity(0.15),
+                                      color: Colors.black.withValues(alpha: 0.15),
                                       blurRadius: 10,
                                       offset: const Offset(0, 5),
                                     ),
@@ -347,10 +349,10 @@ class _LoginScreenState extends State<LoginScreen>
                               child: Container(
                                 padding: const EdgeInsets.all(12),
                                 decoration: BoxDecoration(
-                                  color: Colors.red.withOpacity(0.2),
+                                  color: Colors.red.withValues(alpha: 0.2),
                                   borderRadius: BorderRadius.circular(8),
                                   border: Border.all(
-                                    color: Colors.red.withOpacity(0.5),
+                                    color: Colors.red.withValues(alpha: 0.5),
                                   ),
                                 ),
                                 child: Text(
@@ -380,7 +382,7 @@ class _LoginScreenState extends State<LoginScreen>
                               borderRadius: BorderRadius.circular(12),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.orange.withOpacity(0.3),
+                                  color: Colors.orange.withValues(alpha: 0.3),
                                   blurRadius: 15,
                                   offset: const Offset(0, 8),
                                 ),
@@ -402,7 +404,7 @@ class _LoginScreenState extends State<LoginScreen>
                                             strokeWidth: 2.5,
                                             valueColor:
                                                 AlwaysStoppedAnimation<Color>(
-                                              Colors.white.withOpacity(0.9),
+                                              Colors.white.withValues(alpha: 0.9),
                                             ),
                                           ),
                                         )
@@ -421,6 +423,39 @@ class _LoginScreenState extends State<LoginScreen>
                             ),
                           ),
 
+                          const SizedBox(height: 20),
+
+                          // Register Link
+                          Center(
+                            child: RichText(
+                              text: TextSpan(
+                                text: 'Belum punya akun? ',
+                                style: TextStyle(
+                                  color: Colors.white.withValues(alpha: 0.8),
+                                  fontSize: 14,
+                                ),
+                                children: [
+                                  TextSpan(
+                                    text: 'Daftar di sini',
+                                    style: const TextStyle(
+                                      color: Color(0xFFFFB800),
+                                      fontWeight: FontWeight.bold,
+                                      decoration: TextDecoration.underline,
+                                    ),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () {
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                const RegisterScreen(),
+                                          ),
+                                        );
+                                      },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -435,3 +470,4 @@ class _LoginScreenState extends State<LoginScreen>
   }
 
 }
+

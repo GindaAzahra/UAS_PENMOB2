@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import '../utils/constants.dart';
 import '../services/cart_service.dart';
 
@@ -48,7 +48,7 @@ class _AdvancedCheckoutScreenState extends State<AdvancedCheckoutScreen> with Ti
       'id': 1,
       'name': 'Kartu Kredit',
       'icon': 'card',
-      'details': '•••• •••• •••• 4242',
+      'details': '���� ���� ���� 4242',
     },
     {
       'id': 2,
@@ -84,44 +84,13 @@ class _AdvancedCheckoutScreenState extends State<AdvancedCheckoutScreen> with Ti
     super.dispose();
   }
 
-  IconData _getAddressIcon(String iconName) {
-    switch (iconName) {
-      case 'home':
-        return Icons.home;
-      case 'business':
-        return Icons.business;
-      default:
-        return Icons.location_on;
-    }
-  }
-
-  IconData _getPaymentIcon(String iconName) {
-    switch (iconName) {
-      case 'wallet':
-        return Icons.account_balance_wallet;
-      case 'card':
-        return Icons.credit_card;
-      case 'bank':
-        return Icons.account_balance;
-      case 'cash':
-        return Icons.local_atm;
-      default:
-        // Fallback untuk emoji atau string lain
-        if (iconName.length < 5) {
-          // Kemungkinan emoji
-          return Icons.payment;
-        }
-        return Icons.payment;
-    }
-  }
-
   void _showOrderConfirmed() {
     _successController.forward();
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) => WillPopScope(
-        onWillPop: () async => false,
+      builder: (context) => PopScope(
+        canPop: false,
         child: AlertDialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           contentPadding: const EdgeInsets.all(32),
@@ -136,7 +105,7 @@ class _AdvancedCheckoutScreenState extends State<AdvancedCheckoutScreen> with Ti
                   width: 80,
                   height: 80,
                   decoration: BoxDecoration(
-                    color: successColor.withOpacity(0.1),
+                    color: successColor.withValues(alpha: 0.1),
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(Icons.check_circle, color: successColor, size: 50),
@@ -397,7 +366,7 @@ class _AdvancedCheckoutScreenState extends State<AdvancedCheckoutScreen> with Ti
                 margin: const EdgeInsets.only(bottom: 12),
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: selectedAddress == address['id'] ? primaryColor.withOpacity(0.05) : Colors.white,
+                  color: selectedAddress == address['id'] ? primaryColor.withValues(alpha: 0.05) : Colors.white,
                   border: Border.all(
                     color: selectedAddress == address['id']
                         ? primaryColor
@@ -407,7 +376,7 @@ class _AdvancedCheckoutScreenState extends State<AdvancedCheckoutScreen> with Ti
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.06),
+                      color: Colors.black.withValues(alpha: 0.06),
                       blurRadius: 12,
                       offset: const Offset(0, 3),
                     ),
@@ -419,7 +388,7 @@ class _AdvancedCheckoutScreenState extends State<AdvancedCheckoutScreen> with Ti
                       width: 60,
                       height: 60,
                       decoration: BoxDecoration(
-                        color: primaryColor.withOpacity(0.15),
+                        color: primaryColor.withValues(alpha: 0.15),
                         borderRadius: BorderRadius.circular(14),
                       ),
                       child: Center(
@@ -472,7 +441,7 @@ class _AdvancedCheckoutScreenState extends State<AdvancedCheckoutScreen> with Ti
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
-                              color: primaryColor.withOpacity(0.3),
+                              color: primaryColor.withValues(alpha: 0.3),
                               blurRadius: 8,
                               spreadRadius: 2,
                             ),
@@ -484,7 +453,7 @@ class _AdvancedCheckoutScreenState extends State<AdvancedCheckoutScreen> with Ti
                 ),
               ),
             );
-          }).toList(),
+          }),
           const SizedBox(height: 12),
           GestureDetector(
             onTap: () {
@@ -500,7 +469,7 @@ class _AdvancedCheckoutScreenState extends State<AdvancedCheckoutScreen> with Ti
               decoration: BoxDecoration(
                 color: Colors.white,
                 border: Border.all(
-                  color: primaryColor.withOpacity(0.3),
+                  color: primaryColor.withValues(alpha: 0.3),
                   style: BorderStyle.solid,
                 ),
                 borderRadius: BorderRadius.circular(12),
@@ -549,7 +518,7 @@ class _AdvancedCheckoutScreenState extends State<AdvancedCheckoutScreen> with Ti
                 margin: const EdgeInsets.only(bottom: 12),
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: selectedPaymentMethod == method['id'] ? primaryColor.withOpacity(0.05) : Colors.white,
+                  color: selectedPaymentMethod == method['id'] ? primaryColor.withValues(alpha: 0.05) : Colors.white,
                   border: Border.all(
                     color: selectedPaymentMethod == method['id']
                         ? primaryColor
@@ -559,7 +528,7 @@ class _AdvancedCheckoutScreenState extends State<AdvancedCheckoutScreen> with Ti
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.06),
+                      color: Colors.black.withValues(alpha: 0.06),
                       blurRadius: 12,
                       offset: const Offset(0, 3),
                     ),
@@ -571,7 +540,7 @@ class _AdvancedCheckoutScreenState extends State<AdvancedCheckoutScreen> with Ti
                       width: 60,
                       height: 60,
                       decoration: BoxDecoration(
-                        color: primaryColor.withOpacity(0.15),
+                        color: primaryColor.withValues(alpha: 0.15),
                         borderRadius: BorderRadius.circular(14),
                       ),
                       child: Center(
@@ -618,7 +587,7 @@ class _AdvancedCheckoutScreenState extends State<AdvancedCheckoutScreen> with Ti
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
-                              color: primaryColor.withOpacity(0.3),
+                              color: primaryColor.withValues(alpha: 0.3),
                               blurRadius: 8,
                               spreadRadius: 2,
                             ),
@@ -630,7 +599,7 @@ class _AdvancedCheckoutScreenState extends State<AdvancedCheckoutScreen> with Ti
                 ),
               ),
             );
-          }).toList(),
+          }),
         ],
       ),
     );
@@ -734,7 +703,7 @@ class _AdvancedCheckoutScreenState extends State<AdvancedCheckoutScreen> with Ti
                                   'Note: ${item.notes}',
                                   style: TextStyle(
                                     fontSize: 11,
-                                    color: primaryColor.withOpacity(0.7),
+                                    color: primaryColor.withValues(alpha: 0.7),
                                     fontStyle: FontStyle.italic,
                                   ),
                                   maxLines: 1,
@@ -776,7 +745,7 @@ class _AdvancedCheckoutScreenState extends State<AdvancedCheckoutScreen> with Ti
                             padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                             margin: const EdgeInsets.only(right: 8),
                             decoration: BoxDecoration(
-                              color: successColor.withOpacity(0.1),
+                              color: successColor.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(4),
                             ),
                             child: const Text(
@@ -876,7 +845,7 @@ class _AdvancedCheckoutScreenState extends State<AdvancedCheckoutScreen> with Ti
                       width: 50,
                       height: 50,
                       decoration: BoxDecoration(
-                        color: primaryColor.withOpacity(0.15),
+                        color: primaryColor.withValues(alpha: 0.15),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Center(
@@ -940,7 +909,7 @@ class _AdvancedCheckoutScreenState extends State<AdvancedCheckoutScreen> with Ti
                   width: 50,
                   height: 50,
                   decoration: BoxDecoration(
-                    color: primaryColor.withOpacity(0.15),
+                    color: primaryColor.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Center(
@@ -1060,4 +1029,5 @@ class _StepIndicator extends StatelessWidget {
     );
   }
 }
+
 

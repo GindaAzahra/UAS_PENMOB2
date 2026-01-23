@@ -308,7 +308,7 @@ class _ReportProblemSheetState extends State<_ReportProblemSheet> {
           ),
           const SizedBox(height: 8),
           DropdownButtonFormField<String>(
-            value: selectedCategory,
+            initialValue: selectedCategory,
             items: [
               'Kualitas Makanan',
               'Pengiriman Terlambat',

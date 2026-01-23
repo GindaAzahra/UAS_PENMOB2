@@ -161,7 +161,7 @@ class _EnhancedCartScreenState extends State<EnhancedCartScreen> {
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: primaryColor.withOpacity(0.1),
+                      color: primaryColor.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: const Icon(Icons.edit_note, color: primaryColor, size: 24),
@@ -192,9 +192,9 @@ class _EnhancedCartScreenState extends State<EnhancedCartScreen> {
                 style: const TextStyle(fontSize: 15),
                 decoration: InputDecoration(
                   hintText: 'Contoh: Tidak pedas, extra saus, tanpa bawang',
-                  hintStyle: TextStyle(color: darkGrayColor.withOpacity(0.5)),
+                  hintStyle: TextStyle(color: darkGrayColor.withValues(alpha: 0.5)),
                   filled: true,
-                  fillColor: lightGrayColor.withOpacity(0.3),
+                  fillColor: lightGrayColor.withValues(alpha: 0.3),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide.none,
@@ -215,7 +215,7 @@ class _EnhancedCartScreenState extends State<EnhancedCartScreen> {
                       style: OutlinedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                        side: BorderSide(color: darkGrayColor.withOpacity(0.3)),
+                        side: BorderSide(color: darkGrayColor.withValues(alpha: 0.3)),
                       ),
                       child: const Text('Batal', style: TextStyle(fontWeight: FontWeight.w600)),
                     ),
@@ -291,6 +291,7 @@ class _EnhancedCartScreenState extends State<EnhancedCartScreen> {
         ),
         body: Center(
           child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
             padding: const EdgeInsets.all(32),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -309,7 +310,7 @@ class _EnhancedCartScreenState extends State<EnhancedCartScreen> {
                     width: 140,
                     height: 140,
                     decoration: BoxDecoration(
-                      color: primaryColor.withOpacity(0.1),
+                      color: primaryColor.withValues(alpha: 0.1),
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(
@@ -350,7 +351,7 @@ class _EnhancedCartScreenState extends State<EnhancedCartScreen> {
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 15,
-                          color: darkGrayColor.withOpacity(0.7),
+                          color: darkGrayColor.withValues(alpha: 0.7),
                           height: 1.5,
                         ),
                       ),
@@ -419,11 +420,25 @@ class _EnhancedCartScreenState extends State<EnhancedCartScreen> {
         elevation: 0,
         leading: GestureDetector(
           onTap: () => Navigator.pop(context),
-          child: const Icon(Icons.arrow_back, color: primaryColor),
+          child: Container(
+            margin: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: primaryColor.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: const Icon(Icons.arrow_back_ios_new_rounded, color: primaryColor, size: 18),
+          ),
         ),
-        title: Text(
-          'Keranjang (${_cartService.itemCount})',
-          style: const TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 18),
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.shopping_cart_rounded, color: primaryColor, size: 22),
+            const SizedBox(width: 10),
+            Text(
+              'Keranjang (${_cartService.itemCount})',
+              style: const TextStyle(color: textColor, fontWeight: FontWeight.w700, fontSize: 18, letterSpacing: -0.3),
+            ),
+          ],
         ),
         centerTitle: true,
         actions: [
@@ -477,7 +492,7 @@ class _EnhancedCartScreenState extends State<EnhancedCartScreen> {
                       borderRadius: BorderRadius.circular(14),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
+                          color: Colors.black.withValues(alpha: 0.05),
                           blurRadius: 10,
                           offset: const Offset(0, 2),
                         ),
@@ -657,7 +672,7 @@ class _EnhancedCartScreenState extends State<EnhancedCartScreen> {
                               ),
                             ],
                           );
-                        }).toList(),
+                        }),
                       ],
                     ),
                   ),
@@ -671,7 +686,7 @@ class _EnhancedCartScreenState extends State<EnhancedCartScreen> {
                       borderRadius: BorderRadius.circular(14),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
+                          color: Colors.black.withValues(alpha: 0.05),
                           blurRadius: 10,
                           offset: const Offset(0, 2),
                         ),
@@ -744,9 +759,9 @@ class _EnhancedCartScreenState extends State<EnhancedCartScreen> {
                                       child: Container(
                                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                                         decoration: BoxDecoration(
-                                          color: primaryColor.withOpacity(0.1),
+                                          color: primaryColor.withValues(alpha: 0.1),
                                           borderRadius: BorderRadius.circular(8),
-                                          border: Border.all(color: primaryColor.withOpacity(0.3)),
+                                          border: Border.all(color: primaryColor.withValues(alpha: 0.3)),
                                         ),
                                         child: Text(
                                           code,
@@ -764,9 +779,9 @@ class _EnhancedCartScreenState extends State<EnhancedCartScreen> {
                           Container(
                             padding: const EdgeInsets.all(12),
                             decoration: BoxDecoration(
-                              color: successColor.withOpacity(0.1),
+                              color: successColor.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(10),
-                              border: Border.all(color: successColor.withOpacity(0.3)),
+                              border: Border.all(color: successColor.withValues(alpha: 0.3)),
                             ),
                             child: Row(
                               children: [
@@ -789,7 +804,7 @@ class _EnhancedCartScreenState extends State<EnhancedCartScreen> {
                                         'Hemat Rp ${_cartService.discountAmount.toStringAsFixed(0)}',
                                         style: TextStyle(
                                           fontSize: 12,
-                                          color: successColor.withOpacity(0.8),
+                                          color: successColor.withValues(alpha: 0.8),
                                         ),
                                       ),
                                     ],
@@ -820,7 +835,7 @@ class _EnhancedCartScreenState extends State<EnhancedCartScreen> {
                       borderRadius: BorderRadius.circular(14),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
+                          color: Colors.black.withValues(alpha: 0.05),
                           blurRadius: 10,
                           offset: const Offset(0, 2),
                         ),
@@ -855,7 +870,7 @@ class _EnhancedCartScreenState extends State<EnhancedCartScreen> {
                                   Container(
                                     padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                                     decoration: BoxDecoration(
-                                      color: successColor.withOpacity(0.1),
+                                      color: successColor.withValues(alpha: 0.1),
                                       borderRadius: BorderRadius.circular(4),
                                     ),
                                     child: const Text(
@@ -930,7 +945,7 @@ class _EnhancedCartScreenState extends State<EnhancedCartScreen> {
               color: Colors.white,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
+                  color: Colors.black.withValues(alpha: 0.1),
                   blurRadius: 10,
                   offset: const Offset(0, -2),
                 ),
@@ -1025,3 +1040,4 @@ class _PriceSummaryRow extends StatelessWidget {
     );
   }
 }
+

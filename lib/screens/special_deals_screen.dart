@@ -91,13 +91,13 @@ class _SpecialDealsScreenState extends State<SpecialDealsScreen> {
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                             colors: [
-                              primaryColor.withOpacity(0.05),
-                              accentColor.withOpacity(0.05),
+                              primaryColor.withValues(alpha: 0.05),
+                              accentColor.withValues(alpha: 0.05),
                             ],
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
                           ),
-                          border: Border.all(color: primaryColor.withOpacity(0.3)),
+                          border: Border.all(color: primaryColor.withValues(alpha: 0.3)),
                           borderRadius: BorderRadius.circular(16),
                         ),
                         padding: const EdgeInsets.all(16),
@@ -113,7 +113,7 @@ class _SpecialDealsScreenState extends State<SpecialDealsScreen> {
                                       width: 60,
                                       height: 60,
                                       decoration: BoxDecoration(
-                                        color: accentColor.withOpacity(0.2),
+                                        color: accentColor.withValues(alpha: 0.2),
                                         borderRadius: BorderRadius.circular(12),
                                       ),
                                       child: Center(
@@ -180,7 +180,7 @@ class _SpecialDealsScreenState extends State<SpecialDealsScreen> {
                                   'Berlaku hingga ${deal['validUntil']}',
                                   style: TextStyle(
                                     fontSize: 10,
-                                    color: primaryColor.withOpacity(0.7),
+                                    color: primaryColor.withValues(alpha: 0.7),
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
@@ -235,9 +235,9 @@ class _SpecialDealsScreenState extends State<SpecialDealsScreen> {
               margin: const EdgeInsets.all(16),
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: primaryColor.withOpacity(0.1),
+                color: primaryColor.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: primaryColor.withOpacity(0.3)),
+                border: Border.all(color: primaryColor.withValues(alpha: 0.3)),
               ),
               child: Row(
                 children: [
@@ -282,3 +282,4 @@ class _SpecialDealsScreenState extends State<SpecialDealsScreen> {
     );
   }
 }
+
